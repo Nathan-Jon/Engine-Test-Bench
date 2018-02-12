@@ -46,8 +46,9 @@ namespace GameEngine
             // TODO: Add your initialization logic here
             ScreenHeight = GraphicsDevice.Viewport.Height;
             ScreenWidth = GraphicsDevice.Viewport.Width;
-            lineTexture = new Texture2D(this.GraphicsDevice, 1, 1);
-            lineTexture.SetData<Color>(new Color[] { Color.White });
+            lineTexture = new Texture2D(GraphicsDevice, 1, 1);
+            lineTexture.SetData(new Color[] { Color.White });
+            QuadTree quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             base.Initialize();
 

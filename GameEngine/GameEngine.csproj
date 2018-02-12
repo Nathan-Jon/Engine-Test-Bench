@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IAsset.cs" />
+    <Compile Include="QuadTree.cs" />
     <Compile Include="SATClass.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Game1.cs" />
