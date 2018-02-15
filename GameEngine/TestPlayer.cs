@@ -8,96 +8,92 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameEngine
 {
-    class TestPlayer : IAsset 
+    class TestPlayer : AssetBase, IAsset 
     {
         public Texture2D Object;
-        public Vector2 Locn;
-        public float force = 4;
 
+        public float ForceX = 2;
+        public float ForceY = 2;
 
         //Create variables for the points
         //List to Store pont Variables
-        public List<Vector2> Points = new List<Vector2>();
+        private List<Vector2> Points = new List<Vector2>();
+        public List<Vector2> edges = new List<Vector2>();
         Vector2 _point1;
         Vector2 _point2;
         Vector2 _point3;
         Vector2 _point4;
        
-
-        public void setPos(float Xpos, float Ypos)
-        {
-            Locn.X = Xpos;
-            Locn.Y = Ypos;
-        }
-        public void setTex(Texture2D tex)
-        {
-            Object = tex;
-        }
-        public Vector2 getPos
-        {
-            get { return Locn; }
-        }
-        public Texture2D getTex
-        {
-            get { return Object; }
-        }
         public void KeyBoardMove()
         {
             KeyboardState state = Keyboard.GetState();
 
-            if (state.IsKeyDown(Keys.D))
-            { Locn.X += 4;}
-            if (state.IsKeyDown(Keys.A))
-            { Locn.X -= 4; }
-            if (state.IsKeyDown(Keys.S))
-            { Locn.Y += 4; }
-            if (state.IsKeyDown(Keys.W))
-            { Locn.Y -= 4; }
+            if (state.IsKeyDown(Keys.D) || state.IsKeyDown(Keys.Right))
+            {
+                ApplyForce(new Vector2(-ForceX,0));
+            }
+            if (state.IsKeyDown(Keys.A) || state.IsKeyDown(Keys.Left))
+            {
+                ApplyForce(new Vector2(ForceX, 0));
+            }
+            if (state.IsKeyDown(Keys.S) || state.IsKeyDown(Keys.Down))
+            {
+                ApplyForce(new Vector2(0, -ForceY));
+            }
+            if (state.IsKeyDown(Keys.W) || state.IsKeyDown(Keys.Up))
+            {
+                ApplyForce(new Vector2(0,ForceY));
+            }
         }
 
-        public void setPoints()
+        public void SetPoints()
         {
+            Points.Clear();
             //Top Left
-            _point1 = new Vector2(getPos.X, getPos.Y);
+            _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
-            _point2 = new Vector2((getPos.X + getTex.Width), getPos.Y);
+            _point2 = new Vector2((Position.X + GetTex.Width), Position.Y);
             //Bottom Right
-            _point3 = new Vector2((getPos.X + getTex.Width), (getPos.Y + getTex.Height));
+            _point3 = new Vector2((Position.X + GetTex.Width), (Position.Y + GetTex.Height));
             //Bottom Left
-            _point4 = new Vector2(getPos.X, (getPos.Y + getTex.Height));
+            _point4 = new Vector2(Position.X, (Position.Y + GetTex.Height));
 
 
             Points.Add(_point1);
             Points.Add(_point2);
             Points.Add(_point3);
             Points.Add(_point4);
-        }
-        public List<Vector2> getPoints()
-        {
-            setPoints();
-            return Points;
+
+            BuildEdges();
         }
 
-        //Create the Edges and returns the Axies from each edge
-        public List<Vector2> getAxies()
+        public void BuildEdges()
         {
-            List<Vector2> Axies = new List<Vector2>();
-            //Get the edges between each point
+            Vector2 p1;
+            Vector2 p2;
+            edges.Clear();
             for (int i = 0; i < Points.Count; i++)
             {
-                //Edges are created by subtracting points between two points(vertices)
-                Vector2 _edge = Points[i] - Points[i + 1 == Points.Count ? 0 : i + 1];
-                //Find the Normal of the edge
-                _edge.Normalize();
-                Axies.Add(_edge);
+                p1 = Points[i];
+                if (i + 1 >= Points.Count)
+                {
+                    p2 = Points[0];
+                }
+                else
+                {
+                    p2 = Points[i + 1];
+                }
+                edges.Add(p2 - p1);
             }
-            return Axies;
+
+
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draws the object on screen
-            spriteBatch.Draw(getTex, getPos, Color.BlueViolet);
+            spriteBatch.Draw(GetTex, Points[0], Color.BlueViolet);
             //test();
         }
         
@@ -105,31 +101,81 @@ namespace GameEngine
         {
             //Side Of Screen//
 
-            if (getPos.X >= 850)
+            if (Position.X >= 850)
             {
-               Locn.X = 850;
-
+                Position = (new Vector2(850, Position.Y));
             }
-            if (getPos.X <= 0)
+            if (Position.X <= 0)
             {
-                Locn.X = 0;
+                Position = (new Vector2(0, Position.Y));
             }
-            if (getPos.Y >= 550)
+            if (Position.Y >= 550)
             {
-                Locn.Y = 550;
+                Position = (new Vector2(Position.X, 550));
             }
-            if (getPos.Y <= 0)
+            if (Position.Y <= 0)
             {
-                Locn.Y = 0;
+                Position = (new Vector2(Position.X, 0));
             }
 
         }
 
         public void Update()
         {
-            KeyBoardMove();
-            
+            SetPoints();
+            KeyBoardMove();          
             CollisionDetection();
+            UpdatePhysics();
+        }
+
+        public Vector2 Center()
+        {
+                float totalX = 0;
+                float totalY = 0;
+                for (int i = 0; i < Points.Count; i++)
+                {
+                    totalX += Points[i].X;
+                    totalY += Points[i].Y;
+                }
+                return new Vector2(totalX / Points.Count, totalY / Points.Count);
+        }
+
+        public void Offset(Vector2 translation)
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Vector2 p = Points[i];
+                Points[i] = new Vector2(p.X + translation.X, p.Y + translation.Y);
+            }
+
+        }
+
+
+        public List<Vector2> Edges()
+        {
+            return edges;
+        }
+
+        public List<Vector2> Point()
+        {
+            return Points;
+        }
+        public Vector2 Velocity()
+        {
+            return new Vector2(0,0);
+        }
+
+        public void setPos(Vector2 locn)
+        {
+            Position = locn;
+        }
+        public void setTex(Texture2D tex)
+        {
+            Object = tex;
+        }
+        public Texture2D GetTex
+        {
+            get { return Object; }
         }
     }
 }

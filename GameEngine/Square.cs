@@ -8,131 +8,169 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameEngine
 {
-    class Square : IAsset
+    class Square : AssetBase, IAsset
     {
         public Texture2D Object;
-        public Vector2 Locn;
+
+        public float ForceX = 1;
+        public float ForceY = 2;
 
         //Create variables for the points
         //List to Store pont Variables
-        public List<Vector2> Points = new List<Vector2>();
+        private List<Vector2> Points = new List<Vector2>();
+        private List<Vector2> edges = new List<Vector2>();
         Vector2 _point1;
         Vector2 _point2;
         Vector2 _point3;
         Vector2 _point4;
 
+
+
         //STORE THE POINTS IN THE VARIABLES
         public void setPoints()
         {
+            Points.Clear();
+
             //Top Left
-            _point1 = new Vector2(getPos.X, getPos.Y);
+            _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
-            _point2 = new Vector2((getPos.X + getTex.Width), getPos.Y);
+            _point2 = new Vector2((Position.X + getTex.Width), Position.Y);
             //Bottom Right
-            _point3 = new Vector2((getPos.X + getTex.Width), (getPos.Y + getTex.Height));
+            _point3 = new Vector2((Position.X + getTex.Width), (Position.Y + getTex.Height));
             //Bottom Left
-            _point4 = new Vector2(getPos.X, (getPos.Y + getTex.Height));
+            _point4 = new Vector2(Position.X, (Position.Y + getTex.Height));
 
 
             Points.Add(_point1);
-            Points.Add(_point2);
+          //  Points.Add(_point2);
             Points.Add(_point3);
             Points.Add(_point4);
+
+            BuildEdges();
         }
-
-        //RETURN POINTS LIST
-        public List<Vector2> getPoints()
+     
+        public void setPos(Vector2 Posn)
         {
-            setPoints();
-            return Points;
-        }
-
-        //Create the Edges and returns the Axies from each edge
-        public List<Vector2> getAxies()
-        {
-            List<Vector2> Axies = new List<Vector2>();
-            //Get the edges between each point
-            for (int i = 0; i < Points.Count; i++)
-            {
-                //Edges are created by subtracting points between two points(vertices)
-                Vector2 _edge = Points[i] - Points[i + 1 == Points.Count ? 0 : i + 1];
-                //Find the Normal of the edge
-                _edge.Normalize();
-                Axies.Add(_edge);
-            }
-            return Axies;
-        }
-
-
-
-
-        float facing = 1;
-        
-        public void setPos(float Xpos, float Ypos)
-        {
-            Locn.X = Xpos;
-            Locn.Y = Ypos;
+            Position = Posn;
         }
         public void setTex(Texture2D tex)
         {
             Object = tex;
         }
-        public Vector2 getPos
-        {
-            get { return Locn; }
-        }
+        //public Vector2 getPos
+        //{
+        //    get { return Position; }
+        //}
         public Texture2D getTex
         {
             get { return Object; }
         }
         public void move()
         {
-            Locn.X += 4 * facing;
+            ApplyForce(new Vector2(-ForceX, 0));
+            // Locn += velocity * facing;
+        }
+
+
+        public void BuildEdges()
+        {
+            Vector2 p1;
+            Vector2 p2;
+
+            edges.Clear();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                p1 = Points[i];
+                if (i + 1 >= Points.Count)
+                {
+                    p2 = Points[0];
+                }
+                else
+                {
+                    p2 = Points[i + 1];
+                }
+                edges.Add(p2 - p1);
+            }
+
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draws the object on screen
-            spriteBatch.Draw(getTex, getPos, Color.AntiqueWhite);
+            spriteBatch.Draw(getTex, Points[0], Color.AntiqueWhite);
         }
 
         public void CollisionDetection()
         {
             //Side Of Screen//
 
-            if (getPos.X >= 850)
+            if (Position.X >= 850)
             {
-                //Locn.X = 850;
-                facing = facing * -1;
+                Position = (new Vector2(850, Position.Y));
+                ForceX = ForceX * -1;
 
             }
-            if (getPos.X <= 0)
+            if (Position.X <= 0)
             {
-                //Locn.X = 0;
-                facing = facing * -1;
+                Position = (new Vector2(0, Position.Y));
+                ForceX = ForceX * -1;
             }
-            if (getPos.Y >= 550)
+            if (Position.Y >= 550)
             {
-                Locn.Y = 550;
+                Position = (new Vector2(Position.X, 550));
             }
-            if (getPos.Y <= 0)
+            if (Position.Y <= 0)
             {
-                Locn.Y = 0;
+                Position = (new Vector2(Position.X, 0));
             }
-
-        }
-
-        public void Hitbox()
-        {
-
 
         }
 
         public void Update()
         {
-            move();
-            //setPoints();
+           // move();
+            setPoints();
             CollisionDetection();
+            UpdatePhysics();
+        }
+
+        public Vector2 Center()
+        {
+
+                float totalX = 0;
+                float totalY = 0;
+                for (int i = 0; i < Points.Count; i++)
+                {
+                    totalX += Points[i].X;
+                    totalY += Points[i].Y;
+                }
+
+                return new Vector2(totalX / (float)Points.Count, totalY / (float)Points.Count);
+        }
+
+        public void Offset(Vector2 translation)
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Vector2 p = Points[i];
+                Points[i] = new Vector2(p.X + translation.X, p.Y + translation.Y);
+            }
+        }
+
+        public List<Vector2> Edges()
+        {
+            return edges;
+        }
+
+        public List<Vector2> Point()
+        {
+            return Points;
+        }
+
+        public Vector2 Velocity()
+        {
+            return new Vector2(0, 0);
         }
     }
 }

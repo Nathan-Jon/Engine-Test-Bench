@@ -21,9 +21,11 @@ namespace GameEngine
 
         private Texture2D lineTexture;
 
-        Square ball1 = new Square();
-        TestPlayer player = new TestPlayer();
-        SATClass SAT;
+        IAsset ball1;
+        IAsset player;
+        List<IAsset> Enities = new List<IAsset>(); 
+        Vector2 PlayerTranslation;
+        NewSAT SAT;
 
 
         public Game1()
@@ -49,6 +51,14 @@ namespace GameEngine
             lineTexture = new Texture2D(this.GraphicsDevice, 1, 1);
             lineTexture.SetData<Color>(new Color[] { Color.White });
 
+            SAT = new NewSAT();
+
+            ball1= new Square();
+            player = new TestPlayer();
+            Enities.Add(ball1);
+            Enities.Add(player);
+            this.IsMouseVisible = true;
+
             base.Initialize();
 
         }
@@ -62,14 +72,15 @@ namespace GameEngine
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ball1.setPos(400, 150);
+            ball1.setPos(new Vector2 (400, 150));
             ball1.setTex(Content.Load<Texture2D>("square"));
+            
 
-            player.setPos(300, 300);
+            player.setPos(new Vector2(390, 140));
             player.setTex(Content.Load<Texture2D>("square"));
+            
 
 
-            SAT = new SATClass(ball1, player);
             // TODO: use this.Content to load your game content here
         }
 
@@ -93,7 +104,6 @@ namespace GameEngine
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            SAT.SquareVsSquare();
 
 
             // TODO: Add your update logic here
@@ -101,9 +111,31 @@ namespace GameEngine
             ball1.Update();
             player.Update();
 
-            // SAT.runTest();
+            Vector2 velocity = player.Velocity();
+            PlayerTranslation = velocity;
 
+            foreach (IAsset entity in Enities)
+            {
+
+                SAT.PolygonVsPolygon(player, ball1, velocity);
+                
+
+                if (SAT.WillIntersect)
+                {
+                    //PlayerTranslation = velocity + SAT.MTV;
+                    player.Position +=  SAT.MTV;
+                    //ball1.Position -= SAT.MTV;
+                    break;
+                }
+            }
+
+           // player.Offset(PlayerTranslation);
         }
+
+			
+
+            // SAT.runTest();
+            
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -111,7 +143,7 @@ namespace GameEngine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (SATClass._ColBool == true)
+            if (SAT.Intersect == true)
             {
                 GraphicsDevice.Clear(Color.Blue);
             }
@@ -122,8 +154,8 @@ namespace GameEngine
 
             ball1.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            IList<Vector2> ballPoints = ball1.getPoints();
-            IList<Vector2> playerPoints = player.getPoints();
+            IList<Vector2> ballPoints = ball1.Point();
+            IList<Vector2> playerPoints = player.Point();
             for (int i = 0; i < ballPoints.Count; i++)
             {
                 DrawLine(
