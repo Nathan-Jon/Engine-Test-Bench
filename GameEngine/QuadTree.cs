@@ -13,7 +13,7 @@ namespace GameEngine
     class QuadTree
     {
         //Number of objects to be held in a branch before a new node will be created
-        private int _MaxObjs = 10;
+        private int _MaxObjs = 4;
         private int _MaxLevels;
 
         //level of the node 
@@ -21,7 +21,7 @@ namespace GameEngine
 
         private List<IAsset> _Objects;
         private Rectangle _Bounds;
-        private List<QuadTree> _Nodes;
+        private QuadTree[] _Nodes;
 
 
         public QuadTree(int level, Rectangle area)
@@ -29,7 +29,7 @@ namespace GameEngine
             _Level = level;
             _Objects = new List<IAsset>();
             _Bounds = area;
-            _Nodes = new List<QuadTree>();
+            _Nodes = new QuadTree[4];
 
         }
 
@@ -43,7 +43,7 @@ namespace GameEngine
             _Objects.Clear();
 
             //clear each of the nodes lists
-            for (int i = 0; i < _Nodes.Count; i++)
+            for (int i = 0; i < _Nodes.Length; i++)
             {
                 if (_Nodes[i] != null)
                 {
@@ -63,10 +63,15 @@ namespace GameEngine
             int x = _Bounds.X;
             int y = _Bounds.Y;
 
-            _Nodes[0] = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y, _SubWidth, _SubHeight));
-            _Nodes[1] = new QuadTree(_Level + 1, new Rectangle(x, y, _SubWidth, _SubHeight));
-            _Nodes[2] = new QuadTree(_Level + 1, new Rectangle(x, y + _SubHeight, _SubWidth, _SubHeight));
-            _Nodes[3] = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y + _SubHeight, _SubWidth, _SubHeight));
+            QuadTree quad1 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y, _SubWidth, _SubHeight));
+            QuadTree quad2 = new QuadTree(_Level + 1, new Rectangle(x, y, _SubWidth, _SubHeight));
+            QuadTree quad3 = new QuadTree(_Level + 1, new Rectangle(x, y + _SubHeight, _SubWidth, _SubHeight));
+            QuadTree quad4 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y + _SubHeight, _SubWidth, _SubHeight));
+
+            _Nodes[0] = quad1;
+            _Nodes[0] = quad2;
+            _Nodes[0] = quad3;
+            _Nodes[0] = quad4;
         }
 
         /// <summary>
@@ -115,13 +120,13 @@ namespace GameEngine
         public void InsertObj(IAsset _Rect)
         {
             //If there is a node
-            if (_Nodes[0] != null)
+            if (_Nodes != null)
             {
                 //Get the Asset
                 int _Index = GetIndex(_Rect);
 
                 // If the Asset isn't -1 
-                if (_Index != -1)
+                if (_Index == -1)
                 {
                     _Nodes[_Index].InsertObj(_Rect);
                 }
@@ -145,9 +150,9 @@ namespace GameEngine
 
                     if (_Index != -1)
                     {
-                        _Nodes[_Index].InsertObj(_Objects[i]); 
+                        _Nodes[_Index].InsertObj(_Objects[i]);
                     }
-                    else i++; 
+                    else i++;
                 }
             }
         }
@@ -164,19 +169,14 @@ namespace GameEngine
 
             //if the index is -1 and there is nodes, call the getList method 
             if (_Index != -1 && _Nodes[0] != null)
-            { _Nodes[_Index].getList(returnObjs, _Rect); }
+            {
+                _Nodes[_Index].getList(returnObjs, _Rect);
+            }
 
             //else, return the _Objects list
-            returnObjs = _Objects;
+            returnObjs.Add(_Rect);
 
             return returnObjs;
         }
-
-        public void Draw(SpriteBatch sprite)
-        {
-
-        }
     }
 }
-
-
