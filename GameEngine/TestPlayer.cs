@@ -74,6 +74,7 @@ namespace GameEngine
         }
         public List<Vector2> getPoints()
         {
+            Points.Clear();
             setPoints();
             return Points;
         }

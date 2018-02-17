@@ -43,6 +43,7 @@ namespace GameEngine
         //RETURN POINTS LIST
         public List<Vector2> getPoints()
         {
+            Points.Clear();
             setPoints();
             return Points;
         }
@@ -131,7 +132,6 @@ namespace GameEngine
         public void Update()
         {
             move();
-            //setPoints();
             CollisionDetection();
         }
     }

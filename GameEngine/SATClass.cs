@@ -14,16 +14,10 @@ namespace GameEngine
     class SATClass
     {
         #region Variables
-        //Reference to Square class
-        public Square _sq;
-        //Reference to Player Class
-        public TestPlayer _play;
 
         //Lists for the Object points to be obtained from
         public List<Vector2> PointList1;
         public List<Vector2> PointList2;
-        List<IAsset> testObjs;
-
         //Bool to alert to collision
         public static bool _ColBool = false;
         #endregion
@@ -52,20 +46,6 @@ namespace GameEngine
         }
 
         /// <summary>
-        /// CTOR which sets the square and player class upon class creation
-        /// </summary>
-        /// <param name="square"></param>
-        /// <param name="player"></param
-        public SATClass(Square square, TestPlayer player)
-        {
-            _sq = square;
-            _play = player;
-            testObjs = new List<IAsset>();
-            testObjs.Add(_sq);
-            testObjs.Add(_play);
-        }
-
-        /// <summary>
         /// Detects collisions between object with 4 points
         /// 
         /// Project the object points onto the Axis
@@ -73,15 +53,15 @@ namespace GameEngine
         /// Return True if there is an interesection
         /// 
         /// </summary>
-        public void SquareVsSquare()
+        public void SquareVsSquare(IAsset _ent1, IAsset _ent2)
         {
             //Get Points for each list
-            PointList1 = testObjs[0].getPoints(); // sq
-            PointList2 = testObjs[1].getPoints(); //r playe
+            PointList1 = _ent1.getPoints(); // sq
+            PointList2 = _ent2.getPoints(); //r playe
 
             //Get the axies to be tested on
-            List<Vector2> Axies1 = testObjs[0].getAxies(); //sq
-            List<Vector2> Axies2 = testObjs[1].getAxies(); //player
+            List<Vector2> Axies1 = _ent1.getAxies(); //sq
+            List<Vector2> Axies2 = _ent2.getAxies(); //player
 
 
             ////Run a loop going through each of the axies of the square
@@ -137,10 +117,6 @@ namespace GameEngine
                     break;
                 }
             }
-            Console.WriteLine(_ColBool);
-            //Clear the points lists so they dont go crazy
-            _sq.Points.Clear();
-            _play.Points.Clear();
         }
 
         /// <summary>

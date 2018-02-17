@@ -22,9 +22,13 @@ namespace GameEngine
         private Texture2D lineTexture;
 
         Square ball1 = new Square();
+        Square ball2 = new Square();
+        Square ball3 = new Square();
         TestPlayer player = new TestPlayer();
         SATClass SAT;
-
+        QuadTree quad;
+        List<IAsset> objects;
+       // List<IAsset> returnObjs;
 
         public Game1()
         {
@@ -48,7 +52,8 @@ namespace GameEngine
             ScreenWidth = GraphicsDevice.Viewport.Width;
             lineTexture = new Texture2D(GraphicsDevice, 1, 1);
             lineTexture.SetData(new Color[] { Color.White });
-            QuadTree quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
+            objects = new List<IAsset>();
+            quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             base.Initialize();
 
@@ -66,11 +71,29 @@ namespace GameEngine
             ball1.setPos(400, 150);
             ball1.setTex(Content.Load<Texture2D>("square"));
 
+            ball2.setPos(80, 90);
+            ball2.setTex(Content.Load<Texture2D>("square"));
+
+            ball3.setPos(20, 150);
+            ball3.setTex(Content.Load<Texture2D>("square"));
+
             player.setPos(300, 300);
             player.setTex(Content.Load<Texture2D>("square"));
 
 
-            SAT = new SATClass(ball1, player);
+
+
+            objects.Add(player);
+            objects.Add(ball1);
+            objects.Add(ball2);
+            objects.Add(ball3);
+
+            SAT = new SATClass();
+
+            for (int i = 0; i < objects.Count(); i++)
+            {
+                quad.InsertObj(objects[i]);
+            }
             // TODO: use this.Content to load your game content here
         }
 
@@ -94,16 +117,41 @@ namespace GameEngine
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            SAT.SquareVsSquare();
+            //Clear the list of Quads
+            quad.Clear();
+
+
+            //Rereate Quads lists and store objects
+            for (int i = 0; i < objects.Count; i++)
+            {
+                quad.InsertObj(objects[i]);
+            }
+
+
+
+            List<IAsset> returnObjs = new List<IAsset>();
+            for (int i = 0; i < objects.Count; i++)
+            {
+                returnObjs.Clear();
+                quad.getList(returnObjs, objects[i]);
+
+                for (int x = 0; x < returnObjs.Count(); x++)
+                {
+                    SAT.SquareVsSquare(objects[i], returnObjs[x++]) ;
+                    Console.WriteLine("TESTING COLLISIONS");
+                }
+            }
+
+            
 
 
             // TODO: Add your update logic here
             base.Update(gameTime);
             ball1.Update();
+            ball2.Update();
+            ball3.Update();
             player.Update();
-
-            // SAT.runTest();
-
+            
         }
 
         /// <summary>
@@ -122,7 +170,10 @@ namespace GameEngine
             spriteBatch.Begin();
 
             ball1.Draw(spriteBatch);
+            ball2.Draw(spriteBatch);
+            ball3.Draw(spriteBatch);
             player.Draw(spriteBatch);
+
             IList<Vector2> ballPoints = ball1.getPoints();
             IList<Vector2> playerPoints = player.getPoints();
             for (int i = 0; i < ballPoints.Count; i++)
