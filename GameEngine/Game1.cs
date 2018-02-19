@@ -166,11 +166,8 @@ namespace GameEngine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (SAT.Intersect == true)
-            {
-                GraphicsDevice.Clear(Color.Blue);
-            }
-            else GraphicsDevice.Clear(Color.AntiqueWhite);
+
+            GraphicsDevice.Clear(Color.AntiqueWhite);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();

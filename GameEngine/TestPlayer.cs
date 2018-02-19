@@ -52,11 +52,11 @@ namespace GameEngine
             //Top Left
             _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
-            _point2 = new Vector2((Position.X + GetTex.Width), Position.Y);
+            _point2 = new Vector2((Position.X + GetTex().Width), Position.Y);
             //Bottom Right
-            _point3 = new Vector2((Position.X + GetTex.Width), (Position.Y + GetTex.Height));
+            _point3 = new Vector2((Position.X + GetTex().Width), (Position.Y + GetTex().Height));
             //Bottom Left
-            _point4 = new Vector2(Position.X, (Position.Y + GetTex.Height));
+            _point4 = new Vector2(Position.X, (Position.Y + GetTex().Height));
 
 
             Points.Add(_point1);
@@ -93,7 +93,7 @@ namespace GameEngine
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draws the object on screen
-            spriteBatch.Draw(GetTex, Points[0], Color.BlueViolet);
+            spriteBatch.Draw(GetTex(), Points[0], Color.BlueViolet);
             //test();
         }
         
@@ -175,9 +175,9 @@ namespace GameEngine
         {
             Object = tex;
         }
-        public Texture2D GetTex
+        public Texture2D GetTex()
         {
-            get { return Object; }
+            return Object;
         }
     }
 }

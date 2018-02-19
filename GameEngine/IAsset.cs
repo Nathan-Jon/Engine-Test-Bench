@@ -17,6 +17,7 @@ namespace GameEngine
         void Offset(Vector2 translation);
         void setPos(Vector2 locn);
         void setTex(Texture2D tex);
+        Texture2D GetTex();
         void Update();
         List<Vector2> Point();
         List<Vector2> Edges();
