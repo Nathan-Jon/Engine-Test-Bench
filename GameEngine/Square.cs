@@ -30,7 +30,6 @@ namespace GameEngine
         public void setPoints()
         {
             Points.Clear();
-
             //Top Left
             _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
@@ -42,7 +41,7 @@ namespace GameEngine
 
 
             Points.Add(_point1);
-          //  Points.Add(_point2);
+            Points.Add(_point2);
             Points.Add(_point3);
             Points.Add(_point4);
 

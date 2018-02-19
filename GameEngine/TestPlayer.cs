@@ -12,8 +12,8 @@ namespace GameEngine
     {
         public Texture2D Object;
 
-        public float ForceX = 2;
-        public float ForceY = 2;
+        public float ForceX = 4;
+        public float ForceY = 4;
 
         //Create variables for the points
         //List to Store pont Variables
@@ -120,6 +120,7 @@ namespace GameEngine
 
         }
 
+
         public void Update()
         {
             SetPoints();
@@ -127,6 +128,7 @@ namespace GameEngine
             CollisionDetection();
             UpdatePhysics();
         }
+
 
         public Vector2 Center()
         {

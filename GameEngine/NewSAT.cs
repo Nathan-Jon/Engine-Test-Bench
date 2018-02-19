@@ -69,7 +69,7 @@ namespace GameEngine
                 ProjectPoly(axis, _ent2, ref minB, ref maxB);
 
                 //====================================================== DETERMINE IF COLLISIONS ARE OCCURING ====================================================\\
-               
+
                 //Determine if there is an overlap
                 if (IntervalDistance(minA, maxA, minB, maxB) > 0)
                 {
@@ -77,6 +77,7 @@ namespace GameEngine
                     Intersect = false;
 
                 }
+                //================================================= Collision Prediction ================================================\\
 
                 float velocityProj = Vector2.Dot(axis, velocity);
                 if (velocityProj < 0)
@@ -106,17 +107,23 @@ namespace GameEngine
                     minInterDis = interdis;
                     transAxis = axis;
 
+                    //========================================= Set Collision Side ==================================================== \\
+
+                    //sET THE CENTER POINTS 
                     Vector2 d = _ent1.Center() - _ent2.Center();
+
+                    //IF the dot product of the centerpoint is less thank 0, invert the trans axies
                     if (Vector2.Dot(d, transAxis) < 0)
                     {
                         transAxis = -transAxis;
                     }
                 }
-                //Set the MTV variable if collision
+
+                //Set the MTV variable if entities have a chance of colliding
                 if (WillIntersect)
                 {
-                    MTV = transAxis * minInterDis;
 
+                    MTV = transAxis * minInterDis;
                 }
 
 
@@ -124,18 +131,14 @@ namespace GameEngine
 
         }
 
-
-
-        //Collision Normal - need the min / max values and generate a normal along the acies at their 2 points
-        //NEED a vector 2 interval distance 
-        //APPLY FOLLOWING CODE USING THESE VARIABLES
-        // _ent1.Position += 0.5 * intervalDistance * the normal we used to determine collision
-        // _ent2.Position += 0.5 * intervalDistance * the normal we used to determine collision
-
-
-
-
-
+        /// <summary>
+        /// Determines the interesct range between two entities - Requires min & Max points 
+        /// </summary>
+        /// <param name="minA"></param>
+        /// <param name="maxA"></param>
+        /// <param name="minB"></param>
+        /// <param name="maxB"></param>
+        /// <returns></returns>
         public float IntervalDistance(float minA, float maxA, float minB, float maxB)
         {
             if (minA < minB)
@@ -148,7 +151,13 @@ namespace GameEngine
             }
         }
 
-        // Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
+        /// <summary>
+        /// Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
+        /// </summary>
+        /// <param name="axis"></param>
+        /// <param name="Entity"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
         public void ProjectPoly(Vector2 axis, IAsset Entity, ref float min, ref float max)
         {
             // To project a point on an axis use the dot product
