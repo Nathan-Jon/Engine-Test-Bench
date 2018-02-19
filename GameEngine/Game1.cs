@@ -27,7 +27,9 @@ namespace GameEngine
         TestPlayer player = new TestPlayer();
         SATClass SAT;
         QuadTree quad;
+        QuadTreeManager quadMgr;
         List<IAsset> objects;
+        static public Texture2D quadText;
        // List<IAsset> returnObjs;
 
         public Game1()
@@ -53,8 +55,9 @@ namespace GameEngine
             lineTexture = new Texture2D(GraphicsDevice, 1, 1);
             lineTexture.SetData(new Color[] { Color.White });
             objects = new List<IAsset>();
-            quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
-
+            quadMgr = new QuadTreeManager();
+            quadText = new Texture2D(GraphicsDevice, 1, 1);
+            quadText.SetData(new Color[] { Color.Beige });
             base.Initialize();
 
         }
@@ -68,6 +71,10 @@ namespace GameEngine
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight), spriteBatch, quadMgr);
+
+
             ball1.setPos(400, 150);
             ball1.setTex(Content.Load<Texture2D>("square"));
 
@@ -127,21 +134,19 @@ namespace GameEngine
                 quad.InsertObj(objects[i]);
             }
 
-
-
             List<IAsset> returnObjs = new List<IAsset>();
             for (int i = 0; i < objects.Count; i++)
             {
                 returnObjs.Clear();
                 quad.getList(returnObjs, objects[i]);
+                quadMgr.DrawList(spriteBatch);
 
                 for (int x = 0; x < returnObjs.Count(); x++)
                 {
-                    SAT.SquareVsSquare(objects[i], returnObjs[x++]) ;
+                    SAT.SquareVsSquare(objects[i], returnObjs[x]) ;
                     Console.WriteLine("TESTING COLLISIONS");
                 }
             }
-
             
 
 
@@ -151,6 +156,7 @@ namespace GameEngine
             ball2.Update();
             ball3.Update();
             player.Update();
+            quad.Draw(spriteBatch);
             
         }
 

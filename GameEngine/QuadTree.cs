@@ -13,7 +13,7 @@ namespace GameEngine
     class QuadTree
     {
         //Number of objects to be held in a branch before a new node will be created
-        private int _MaxObjs = 4;
+        private int _MaxObjs = 1;
         private int _MaxLevels;
 
         //level of the node 
@@ -22,14 +22,21 @@ namespace GameEngine
         private List<IAsset> _Objects;
         private Rectangle _Bounds;
         private QuadTree[] _Nodes;
+        QuadTreeManager quads;
 
 
-        public QuadTree(int level, Rectangle area)
+        private SpriteBatch _spriteBatch;
+
+        public QuadTree(int level, Rectangle area, SpriteBatch sprite, QuadTreeManager _quadMgr)
         {
+            _spriteBatch = sprite;
+            _quadMgr.addToList(this);
+            quads = _quadMgr;
             _Level = level;
             _Objects = new List<IAsset>();
             _Bounds = area;
             _Nodes = new QuadTree[4];
+            Draw(sprite);
 
         }
 
@@ -63,15 +70,16 @@ namespace GameEngine
             int x = _Bounds.X;
             int y = _Bounds.Y;
 
-            QuadTree quad1 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y, _SubWidth, _SubHeight));
-            QuadTree quad2 = new QuadTree(_Level + 1, new Rectangle(x, y, _SubWidth, _SubHeight));
-            QuadTree quad3 = new QuadTree(_Level + 1, new Rectangle(x, y + _SubHeight, _SubWidth, _SubHeight));
-            QuadTree quad4 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y + _SubHeight, _SubWidth, _SubHeight));
-
+            QuadTree quad1 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y, _SubWidth, _SubHeight), _spriteBatch,quads );
+            QuadTree quad2 = new QuadTree(_Level + 1, new Rectangle(x, y, _SubWidth, _SubHeight), _spriteBatch, quads );
+            QuadTree quad3 = new QuadTree(_Level + 1, new Rectangle(x, y + _SubHeight, _SubWidth, _SubHeight), _spriteBatch, quads);
+            QuadTree quad4 = new QuadTree(_Level + 1, new Rectangle(x + _SubWidth, y + _SubHeight, _SubWidth, _SubHeight), _spriteBatch, quads);
+            
             _Nodes[0] = quad1;
-            _Nodes[0] = quad2;
-            _Nodes[0] = quad3;
-            _Nodes[0] = quad4;
+            _Nodes[1] = quad2;
+            _Nodes[2] = quad3;
+            _Nodes[3] = quad4;
+
         }
 
         /// <summary>
@@ -177,6 +185,22 @@ namespace GameEngine
             returnObjs.Add(_Rect);
 
             return returnObjs;
+        }
+
+
+
+
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(Game1.quadText, new Rectangle(_Bounds.X, _Bounds.Y, _Bounds.Width, 3), Color.White);
+            spriteBatch.Draw(Game1.quadText, new Rectangle(_Bounds.X, _Bounds.Y + _Bounds.Height, 3, _Bounds.Height), Color.White);
+            spriteBatch.Draw(Game1.quadText, new Rectangle(_Bounds.X + _Bounds.Width, _Bounds.Y, 3, _Bounds.Height),  Color.White);
+            spriteBatch.Draw(Game1.quadText,new Rectangle(_Bounds.X, _Bounds.Y, 3, _Bounds.Height),Color.White);
+
+            spriteBatch.End();
         }
     }
 }
