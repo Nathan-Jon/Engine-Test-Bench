@@ -39,7 +39,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IAsset.cs" />
-    <Compile Include="SATClass.cs" />
+    <Compile Include="NewSAT.cs" />
+    <Compile Include="AssetBase.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
