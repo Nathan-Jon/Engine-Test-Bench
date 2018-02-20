@@ -12,8 +12,8 @@ namespace GameEngine
     {
         public Texture2D Object;
 
-        public float ForceX = 4;
-        public float ForceY = 4;
+        public float ForceX = 2;
+        public float ForceY = 2;
 
         //Create variables for the points
         //List to Store pont Variables
@@ -23,7 +23,7 @@ namespace GameEngine
         Vector2 _point2;
         Vector2 _point3;
         Vector2 _point4;
-       
+
         public void KeyBoardMove()
         {
             KeyboardState state = Keyboard.GetState();
@@ -120,7 +120,6 @@ namespace GameEngine
 
         }
 
-
         public void Update()
         {
             SetPoints();
@@ -129,6 +128,11 @@ namespace GameEngine
             UpdatePhysics();
         }
 
+        public float Radius()
+        {
+            float radius = Object.Width / 2;
+            return radius;
+        }
 
         public Vector2 Center()
         {

@@ -20,17 +20,12 @@ namespace GameEngine
         public float Damping = 0.5f;
 
 
-        /// <summary>
-        /// Uses a Vector2 to determine the force being placed on the object
-        /// 
-        /// </summary>
-        /// <param name="force"> To be multiplied against the inverse mass</param> 
+
         public void ApplyForce(Vector2 force)
         {
             Acceleration += force * InverseMass;
         }
 
-        /// <param name="closingVelo"></param>
         public void ApplyImpulse(Vector2 closingVelo)
         {
             Velocity = closingVelo * Restitution;
@@ -42,7 +37,6 @@ namespace GameEngine
             Velocity *= Damping;
             Position += Velocity;
             Acceleration = Gravity;
-            
         }
 
     }

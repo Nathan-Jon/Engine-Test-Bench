@@ -9,10 +9,7 @@ namespace GameEngine
 {
     public class NewSAT
     {
-        public bool WillIntersect;
         public bool Intersect;
-        public Vector2 Ent1Point;
-        public Vector2 Ent2Point;
         public Vector2 MTV;
 
 
@@ -22,12 +19,12 @@ namespace GameEngine
         /// <param name="_ent1"></param>
         /// <param name="_ent2"></param>
         /// <param name="velocity"></param>
-        public void PolygonVsPolygon(IAsset _ent1, IAsset _ent2, Vector2 velocity)
+        public void PolygonVsPolygon(IAsset _ent1, IAsset _ent2)
         {
 
             //Initialise booleans
             Intersect = true;
-            WillIntersect = true;
+            
 
             //Iniitialise edges lists
             int ent1Edges = _ent1.Edges().Count;
@@ -36,7 +33,7 @@ namespace GameEngine
             //Variabls for MTV
             float minInterDis = float.PositiveInfinity;
             Vector2 transAxis = new Vector2();
-            Vector2 edge;
+            Vector2 edgeNumber;
 
             //Get the edges we are testing against
             for (int i = 0; i < ent1Edges + ent2Edges; i++)
@@ -46,58 +43,36 @@ namespace GameEngine
 
                 if (i < ent1Edges)
                 {
-                    edge = _ent1.Edges()[i];
+                    edgeNumber = _ent1.Edges()[i];
                 }
                 else
                 {
-                    edge = _ent2.Edges()[i - ent1Edges];
+                    edgeNumber = _ent2.Edges()[i - ent1Edges];
                 }
 
 
                 //attach the axis into a new vector2
-                Vector2 axis = new Vector2(-edge.Y, edge.X);
+                Vector2 axis = new Vector2(-edgeNumber.Y, edgeNumber.X); //Rotate the axies edge by 90 degrees
                 //Normalize the axis
-                axis.Normalize();
+                axis.Normalize();   //Convert Axies to a unit Vector 
 
 
                 //=============================================== PROJECT EVERY POINT ON EVERY AXIES FOR BOTH OBJECTS ===========================================\\
 
-                //Initialise min/Max variables for each obj
-                float minA = 0, minB = 0, maxA = 0, maxB = 0;
 
-                ProjectPoly(axis, _ent1, ref minA, ref maxA);
-                ProjectPoly(axis, _ent2, ref minB, ref maxB);
+                float Ent1Min = 0, Ent2Min = 0, Ent1Max = 0, Ent2Max = 0;       //Initialise min/Max variables for each obj
+
+                ProjectPolygon(axis, _ent1, ref Ent1Min, ref Ent1Max);    //Get the distance of object 1's min and max points on the axies
+                ProjectPolygon(axis, _ent2, ref Ent2Min, ref Ent2Max);    //Get the distance of object 2's min and max points on the axies
 
                 //====================================================== DETERMINE IF COLLISIONS ARE OCCURING ====================================================\\
 
                 //Determine if there is an overlap
-                if (IntervalDistance(minA, maxA, minB, maxB) > 0)
+                float interdis = IntervalDistance(Ent1Min, Ent1Max, Ent2Min, Ent2Max);
+                if (interdis > 0)
                 {
                     //if the value is greater than zero, there is no collision
                     Intersect = false;
-
-                }
-                //================================================= Collision Prediction ================================================\\
-
-                float velocityProj = Vector2.Dot(axis, velocity);
-                if (velocityProj < 0)
-                {
-                    minA += velocityProj;
-                }
-                else
-                {
-                    maxA += velocityProj;
-                }
-
-                //Determine intersect distance
-                float interdis = IntervalDistance(minA, maxA, minB, maxB);
-                if (interdis > 0)
-                {
-                    //if its greater than 0, there is no possible collision
-                    WillIntersect = false;
-                }
-                if (!Intersect && !WillIntersect)
-                {
                     break;
                 }
 
@@ -107,83 +82,59 @@ namespace GameEngine
                     minInterDis = interdis;
                     transAxis = axis;
 
-                    //========================================= Set Collision Side ==================================================== \\
-
-                    //sET THE CENTER POINTS 
-                    Vector2 d = _ent1.Center() - _ent2.Center();
-
-                    //IF the dot product of the centerpoint is less thank 0, invert the trans axies
-                    if (Vector2.Dot(d, transAxis) < 0)
+                    Vector2 centerDistance = _ent1.Center() - _ent2.Center();
+                    if (Vector2.Dot(centerDistance, transAxis) < 0)
                     {
                         transAxis = -transAxis;
                     }
                 }
+                //Set the MTV variable if collision             
 
-                //Set the MTV variable if entities have a chance of colliding
-                if (WillIntersect)
-                {
-
-                    MTV = transAxis * minInterDis;
-                }
+                MTV = transAxis * minInterDis;
+                
 
 
             }
 
         }
 
-        /// <summary>
-        /// Determines the interesct range between two entities - Requires min & Max points 
-        /// </summary>
-        /// <param name="minA"></param>
-        /// <param name="maxA"></param>
-        /// <param name="minB"></param>
-        /// <param name="maxB"></param>
-        /// <returns></returns>
-        public float IntervalDistance(float minA, float maxA, float minB, float maxB)
+        public float IntervalDistance(float Ent1Min, float Ent1Max, float Ent2Min, float Ent2Max)
         {
-            if (minA < minB)
+            if (Ent1Min < Ent2Min)
             {
-                return minB - maxA;
+                return Ent2Min - Ent1Max;
             }
             else
             {
-                return minA - maxB;
+                return Ent1Min - Ent2Max;
             }
         }
 
-        /// <summary>
-        /// Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
-        /// </summary>
-        /// <param name="axis"></param>
-        /// <param name="Entity"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        public void ProjectPoly(Vector2 axis, IAsset Entity, ref float min, ref float max)
+        // Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
+        public void ProjectPolygon(Vector2 axis, IAsset Entity, ref float min, ref float max)
         {
             // To project a point on an axis use the dot product
             List<Vector2> points = Entity.Point();
 
 
-            float d = Vector2.Dot(axis, points[0]);
-            min = d;
-            max = d;
+            float projection = Vector2.Dot(axis, points[0]);
+            min = projection;
+            max = projection;
             for (int i = 0; i < points.Count; i++)
             {
-                d = Vector2.Dot(axis, points[i]);
-                if (d < min)
+                projection = Vector2.Dot(axis, points[i]);
+                if (projection < min)
                 {
-                    min = d;
+                    min = projection;
                 }
-                else
+                else if (projection > max)
                 {
-                    if (d > max)
-                    {
-                        max = d;
-                    }
+                    max = projection;
                 }
             }
         }
-
-
     }
+
+
 }
+

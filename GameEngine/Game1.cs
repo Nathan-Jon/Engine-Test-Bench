@@ -21,14 +21,12 @@ namespace GameEngine
 
         private Texture2D lineTexture;
 
+        IAsset Square;
+        IAsset player;
         IAsset ball1;
         IAsset ball2;
-        IAsset ball3;
-        IAsset ball4;
-        IAsset player;
-        List<IAsset> Entities = new List<IAsset>(); 
-        Vector2 Translation;
         NewSAT SAT;
+        List<IAsset> Entities = new List<IAsset>();
 
 
         public Game1()
@@ -56,21 +54,21 @@ namespace GameEngine
 
             SAT = new NewSAT();
 
+            Square = new Square();
+            player = new TestPlayer();
             ball1 = new Square();
             ball2 = new Square();
-            ball3 = new Square();
-            ball4 = new Square();
-            player = new TestPlayer();
+            Entities.Add(player);
+            Entities.Add(Square);
             Entities.Add(ball1);
             Entities.Add(ball2);
-            Entities.Add(ball3);
-            Entities.Add(ball4);
-            Entities.Add(player);
+
             this.IsMouseVisible = true;
 
             base.Initialize();
 
         }
+
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -80,21 +78,18 @@ namespace GameEngine
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ball1.setPos(new Vector2 (400, 100));
+            Square.setPos(new Vector2 (100, 100));
+            Square.setTex(Content.Load<Texture2D>("square"));
+
+            player.setPos(new Vector2(200, 200));
+            player.setTex(Content.Load<Texture2D>("square"));
+
+            ball1.setPos(new Vector2(300, 300));
             ball1.setTex(Content.Load<Texture2D>("square"));
 
-            ball2.setPos(new Vector2(100, 150));
+            ball2.setPos(new Vector2(400, 400));
             ball2.setTex(Content.Load<Texture2D>("square"));
 
-            ball3.setPos(new Vector2(20, 60));
-            ball3.setTex(Content.Load<Texture2D>("square"));
-
-            ball4.setPos(new Vector2(200, 300));
-            ball4.setTex(Content.Load<Texture2D>("square"));
-
-            player.setPos(new Vector2(390, 140));
-            player.setTex(Content.Load<Texture2D>("square"));
-            
 
 
             // TODO: use this.Content to load your game content here
@@ -124,41 +119,31 @@ namespace GameEngine
 
             // TODO: Add your update logic here
             base.Update(gameTime);
-            ball1.Update();
-            ball2.Update();
-            ball3.Update();
-            ball4.Update();
-            player.Update();
 
+            for (int e = 0; e < Entities.Count; e++)
+                {
+                Entities[e].Update();
+                }
 
-
-            foreach (IAsset entity in Entities)
-            {
                 for (int i = 0; i < Entities.Count; i++)
                 {
-                    for (int x = 0; x < Entities.Count; x++)
+                    for (int x = 0; i < Entities.Count; i++)
                     {
-                        if (x!= i)
+
+                        if (x != i)
                         {
+                            SAT.PolygonVsPolygon(Entities[i], Entities[x]);
 
-                            Vector2 velocity = Entities[i].Velocity();
-                            Translation = velocity;
-
-                            SAT.PolygonVsPolygon(Entities[i], Entities[x], velocity);
-
-                            if (SAT.WillIntersect)
+                            if (SAT.Intersect)
                             {
-                                Translation = velocity + SAT.MTV;
                                 Entities[i].Position += SAT.MTV;
                                 Entities[x].Position -= SAT.MTV;
-                                Entities[i].Offset(Translation);
                             }
-
                         }
                     }
                 }
             }
-        }            
+            
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -175,30 +160,12 @@ namespace GameEngine
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
+            Square.Draw(spriteBatch);
+            player.Draw(spriteBatch);
             ball1.Draw(spriteBatch);
             ball2.Draw(spriteBatch);
-            ball3.Draw(spriteBatch);
-            ball4.Draw(spriteBatch);
-            player.Draw(spriteBatch);
-            IList<Vector2> ballPoints = ball1.Point();
+            IList<Vector2> ballPoints = Square.Point();
             IList<Vector2> playerPoints = player.Point();
-
-            //for (int i = 0; i < Entities.Count; i++)
-            //{
-            //    IList<Vector2> Points = Entities[i].Point();
-
-
-            //    for (int x = 0; x < Points.Count; x++)
-            //    {
-            //        DrawLine(
-            //        spriteBatch, Points[x], ballPoints[x + 1 == ballPoints.Count ? 0 : x + 1]
-            //    );
-            //        Points.Clear();
-
-            //    }
-            //}
-
-
             for (int i = 0; i < ballPoints.Count; i++)
             {
                 DrawLine(
@@ -218,12 +185,7 @@ namespace GameEngine
             base.Draw(gameTime);
         }
 
-        /// <summary>
-        /// Called for the creation of lines between collidable entities
-        /// </summary>
-        /// <param name="sprtiBatch"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
+
         private void DrawLine(SpriteBatch sprtiBatch, Vector2 start, Vector2 end)
         {
             // some fancy shit to be able to draw lines between 2 points

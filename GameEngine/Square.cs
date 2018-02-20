@@ -30,6 +30,7 @@ namespace GameEngine
         public void setPoints()
         {
             Points.Clear();
+
             //Top Left
             _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
@@ -132,6 +133,12 @@ namespace GameEngine
             setPoints();
             CollisionDetection();
             UpdatePhysics();
+        }
+
+        public float Radius()
+        {
+            float radius = Object.Width / 2;
+            return radius;
         }
 
         public Vector2 Center()
