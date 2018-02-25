@@ -157,3 +157,15 @@ C:\Users\User\Desktop\SAT SHIT\GameEngine\bin\WindowsGL\Debug\OpenTK.dll
 C:\Users\User\Desktop\SAT SHIT\GameEngine\obj\x86\Debug\GameEngine.csprojResolveAssemblyReference.cache
 C:\Users\User\Desktop\SAT SHIT\GameEngine\obj\x86\Debug\GameEngine.exe
 C:\Users\User\Desktop\SAT SHIT\GameEngine\obj\x86\Debug\GameEngine.pdb
+C:\Users\User\Desktop\Quad\GameEngine\obj\x86\Debug\GameEngine.exe
+C:\Users\User\Desktop\Quad\GameEngine\obj\x86\Debug\GameEngine.pdb
+C:\Users\User\Desktop\Quad\GameEngine\obj\x86\Debug\GameEngine.csprojResolveAssemblyReference.cache
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\Content\ball.png
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\Content\Brick.jpg
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\Content\paddle.png
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\Content\square.png
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\Content\Wall.jpg
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\GameEngine.exe
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\GameEngine.pdb
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\User\Desktop\Quad\GameEngine\bin\WindowsGL\Debug\OpenTK.dll

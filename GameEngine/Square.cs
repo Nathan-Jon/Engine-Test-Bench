@@ -10,7 +10,6 @@ namespace GameEngine
 {
     class Square : AssetBase, IAsset
     {
-        public Texture2D Object;
 
         public float ForceX = 1;
         public float ForceY = 2;
@@ -34,11 +33,11 @@ namespace GameEngine
             //Top Left
             _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
-            _point2 = new Vector2((Position.X + getTex.Width), Position.Y);
+            _point2 = new Vector2((Position.X + Texture.Width), Position.Y);
             //Bottom Right
-            _point3 = new Vector2((Position.X + getTex.Width), (Position.Y + getTex.Height));
+            _point3 = new Vector2((Position.X + Texture.Width), (Position.Y + Texture.Height));
             //Bottom Left
-            _point4 = new Vector2(Position.X, (Position.Y + getTex.Height));
+            _point4 = new Vector2(Position.X, (Position.Y + Texture.Height));
 
 
             Points.Add(_point1);
@@ -53,18 +52,12 @@ namespace GameEngine
         {
             Position = Posn;
         }
+
         public void setTex(Texture2D tex)
         {
-            Object = tex;
+            Texture = tex;
         }
-        //public Vector2 getPos
-        //{
-        //    get { return Position; }
-        //}
-        public Texture2D getTex
-        {
-            get { return Object; }
-        }
+
         public void move()
         {
             ApplyForce(new Vector2(-ForceX, 0));
@@ -98,7 +91,7 @@ namespace GameEngine
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draws the object on screen
-            spriteBatch.Draw(getTex, Points[0], Color.AntiqueWhite);
+            spriteBatch.Draw(Texture, Points[0], Color.AntiqueWhite);
         }
 
         public void CollisionDetection()
@@ -137,7 +130,7 @@ namespace GameEngine
 
         public float Radius()
         {
-            float radius = Object.Width / 2;
+            float radius = Texture.Width / 2;
             return radius;
         }
 

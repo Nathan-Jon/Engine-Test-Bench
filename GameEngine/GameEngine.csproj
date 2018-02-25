@@ -41,6 +41,7 @@
     <Compile Include="IAsset.cs" />
     <Compile Include="NewSAT.cs" />
     <Compile Include="AssetBase.cs" />
+    <Compile Include="QuadTree.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
