@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameEngine
 {
-    class TestPlayer : AssetBase, IAsset 
+    class TestPlayer : AssetBase, IAsset
     {
 
         public float ForceX = 2;

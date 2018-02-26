@@ -9,7 +9,7 @@ namespace GameEngine
 {
     public class QuadTree
     {
-        int maxObjects = 1;
+        int maxObjects = 2;
         int maxLevels = 5;
         int level;
         List<IAsset> objects;
@@ -72,6 +72,7 @@ namespace GameEngine
                 {
                     Split();
                 }
+               
                 int i = 0;
                 while (i < objects.Count())
                 {
@@ -131,15 +132,39 @@ namespace GameEngine
             if (Index != -1 && nodes[0] != null)
             {
                 nodes[Index].retrieve(returnObjects, Entity);
+            } else if (nodes[0] != null)
+            {
+                foreach (QuadTree node in nodes)
+                {
+                    node.retrieve(returnObjects, Entity);
+                }
             }
-            returnObjects = objects;
+
+            foreach (IAsset item in objects)
+            {
+                if (item != Entity)
+                    returnObjects.Add(item);
+            }
 
             return returnObjects;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Texture2D tex)
         {
             //Draws the object on screen
+
+            spriteBatch.Draw(tex, new Rectangle(bounds.X, bounds.Y, bounds.Width, 3), Color.White);
+            spriteBatch.Draw(tex, new Rectangle(bounds.X, bounds.Y + bounds.Height, 3, bounds.Height), Color.White);
+            spriteBatch.Draw(tex, new Rectangle(bounds.X + bounds.Width, bounds.Y, 3, bounds.Height), Color.White);
+            spriteBatch.Draw(tex, new Rectangle(bounds.X, bounds.Y, 3, bounds.Height), Color.White);
+
+            if (nodes[0] != null)
+            {
+                foreach (QuadTree node in nodes)
+                {
+                    node.Draw(spriteBatch, tex);
+                }
+            }
 
         }
     }

@@ -23,12 +23,13 @@ namespace GameEngine
 
         IAsset Square;
         IAsset player;
-        //IAsset ball1;
-        //IAsset ball2;
+        IAsset ball1;
+        IAsset ball2;
         NewSAT SAT;
         QuadTree quad;
         bool coli = false;
         List<IAsset> Entities = new List<IAsset>();
+
 
 
         public Game1()
@@ -52,18 +53,18 @@ namespace GameEngine
             ScreenHeight = GraphicsDevice.Viewport.Height;
             ScreenWidth = GraphicsDevice.Viewport.Width;
             lineTexture = new Texture2D(this.GraphicsDevice, 1, 1);
-            lineTexture.SetData<Color>(new Color[] { Color.White });
+            lineTexture.SetData<Color>(new Color[] { Color.Green });
 
             SAT = new NewSAT();
 
             Square = new Square();
             player = new TestPlayer();
-            //ball1 = new Square();
-            //ball2 = new Square();
+            ball1 = new Square();
+            ball2 = new Square();
             Entities.Add(player);
             Entities.Add(Square);
-            //Entities.Add(ball1);
-            //Entities.Add(ball2);
+            Entities.Add(ball1);
+            Entities.Add(ball2);
             quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             this.IsMouseVisible = true;
@@ -87,11 +88,11 @@ namespace GameEngine
             player.setPos(new Vector2(200, 200));
             player.setTex(Content.Load<Texture2D>("square"));
 
-            //ball1.setPos(new Vector2(300, 300));
-            //ball1.setTex(Content.Load<Texture2D>("square"));
+            ball1.setPos(new Vector2(300, 300));
+            ball1.setTex(Content.Load<Texture2D>("square"));
 
-            //ball2.setPos(new Vector2(400, 400));
-            //ball2.setTex(Content.Load<Texture2D>("square"));
+            ball2.setPos(new Vector2(400, 400));
+            ball2.setTex(Content.Load<Texture2D>("square"));
 
 
 
@@ -123,49 +124,25 @@ namespace GameEngine
             // TODO: Add your update logic here
             base.Update(gameTime);
 
-            quad.Clear();
+
             for (int i = 0; i < Entities.Count; i++)
             {
-                quad.Insert(Entities[i]);
-            }
-
-            List<IAsset> returnObjects = new List<IAsset>();
-            for(int i = 0; i < Entities.Count; i++)
-            {
-                returnObjects.Clear();
-                returnObjects = quad.retrieve(returnObjects, Entities[i]);
-
-                for (int x = 0; x < returnObjects.Count; x++)
+                for (int x = i; x < Entities.Count; x++)
                 {
-                    coli = true;
-                }
 
-            }
-
-
-            for (int e = 0; e < Entities.Count; e++)
-                {
-                Entities[e].Update();
-                }
-
-                for (int i = 0; i < Entities.Count; i++)
-                {
-                    for (int x = 0; i < Entities.Count; i++)
+                    if (x != i)
                     {
+                        SAT.PolygonVsPolygon(Entities[i], Entities[x]);
 
-                        if (x != i)
+                        if (SAT.Intersect)
                         {
-                            SAT.PolygonVsPolygon(Entities[i], Entities[x]);
-
-                            if (SAT.Intersect)
-                            {
-                                Entities[i].Position += SAT.MTV;
-                                Entities[x].Position -= SAT.MTV;
-                            }
+                            Entities[i].Position += SAT.MTV;
+                            Entities[x].Position -= SAT.MTV;
                         }
                     }
                 }
             }
+        }
             
 
         /// <summary>
@@ -188,10 +165,49 @@ namespace GameEngine
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
+
+            quad.Clear();
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                quad.Insert(Entities[i]);
+            }
+
+            List<IAsset> returnObjects = new List<IAsset>();
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                returnObjects.Clear();
+                returnObjects = quad.retrieve(returnObjects, Entities[i]);
+                
+                if (player == Entities[i])
+                {
+                    if (returnObjects.Count > 0)
+                    {
+                        coli = true;
+                    }
+                    else
+                    {
+                        coli = false;
+                    }
+                }
+         
+
+                //for (int x = 0; x <= returnObjects.Count; x++)
+                //{
+                //    coli = true;
+                //}
+
+            }
+            quad.Draw(spriteBatch, lineTexture);
+
+            for (int e = 0; e < Entities.Count; e++)
+            {
+                Entities[e].Update();
+            }
+
             Square.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            //ball1.Draw(spriteBatch);
-            //ball2.Draw(spriteBatch);
+            ball1.Draw(spriteBatch);
+            ball2.Draw(spriteBatch);
             IList<Vector2> ballPoints = Square.Point();
             IList<Vector2> playerPoints = player.Point();
             for (int i = 0; i < ballPoints.Count; i++)
