@@ -16,8 +16,7 @@ namespace GameEngine
         Vector2 Center();
         Vector2 Velocity();
         Vector2 Position { get; set; }
-        float Radius();
-        void ApplyForce(Vector2 force);
+        Texture2D Texture { get; set; }
 
     }
 }

@@ -8,9 +8,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameEngine
 {
-    class TestPlayer : AssetBase, IAsset 
+    class TestPlayer : AssetBase, IAsset
     {
-        public Texture2D Object;
 
         public float ForceX = 2;
         public float ForceY = 2;
@@ -52,11 +51,11 @@ namespace GameEngine
             //Top Left
             _point1 = new Vector2(Position.X, Position.Y);
             //Top Right
-            _point2 = new Vector2((Position.X + GetTex.Width), Position.Y);
+            _point2 = new Vector2((Position.X + Texture.Width), Position.Y);
             //Bottom Right
-            _point3 = new Vector2((Position.X + GetTex.Width), (Position.Y + GetTex.Height));
+            _point3 = new Vector2((Position.X + Texture.Width), (Position.Y + Texture.Height));
             //Bottom Left
-            _point4 = new Vector2(Position.X, (Position.Y + GetTex.Height));
+            _point4 = new Vector2(Position.X, (Position.Y + Texture.Height));
 
 
             Points.Add(_point1);
@@ -93,8 +92,7 @@ namespace GameEngine
         public void Draw(SpriteBatch spriteBatch)
         {
             //Draws the object on screen
-            spriteBatch.Draw(GetTex, Points[0], Color.BlueViolet);
-            //test();
+            spriteBatch.Draw(Texture, Points[0], Color.BlueViolet);
         }
         
         public void CollisionDetection()
@@ -130,7 +128,7 @@ namespace GameEngine
 
         public float Radius()
         {
-            float radius = Object.Width / 2;
+            float radius = Texture.Width / 2;
             return radius;
         }
 
@@ -177,11 +175,7 @@ namespace GameEngine
         }
         public void setTex(Texture2D tex)
         {
-            Object = tex;
-        }
-        public Texture2D GetTex
-        {
-            get { return Object; }
+            Texture = tex;
         }
     }
 }

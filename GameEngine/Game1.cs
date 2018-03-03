@@ -26,7 +26,10 @@ namespace GameEngine
         IAsset ball1;
         IAsset ball2;
         NewSAT SAT;
+        QuadTree quad;
+        bool coli = false;
         List<IAsset> Entities = new List<IAsset>();
+
 
 
         public Game1()
@@ -50,7 +53,7 @@ namespace GameEngine
             ScreenHeight = GraphicsDevice.Viewport.Height;
             ScreenWidth = GraphicsDevice.Viewport.Width;
             lineTexture = new Texture2D(this.GraphicsDevice, 1, 1);
-            lineTexture.SetData<Color>(new Color[] { Color.White });
+            lineTexture.SetData<Color>(new Color[] { Color.Green });
 
             SAT = new NewSAT();
 
@@ -58,10 +61,13 @@ namespace GameEngine
             player = new TestPlayer();
             ball1 = new Square();
             ball2 = new Square();
+
             Entities.Add(player);
             Entities.Add(Square);
             Entities.Add(ball1);
             Entities.Add(ball2);
+
+            quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             this.IsMouseVisible = true;
 
@@ -120,29 +126,49 @@ namespace GameEngine
             // TODO: Add your update logic here
             base.Update(gameTime);
 
-            for (int e = 0; e < Entities.Count; e++)
-                {
-                Entities[e].Update();
-                }
 
-                for (int i = 0; i < Entities.Count; i++)
+            quad.Clear();
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                quad.Insert(Entities[i]);
+            }
+
+            List<IAsset> returnObjects = new List<IAsset>();
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                returnObjects.Clear();
+                returnObjects = quad.retrieve(returnObjects, Entities[i]);
+
+                if (player == Entities[i])
                 {
-                    for (int x = 0; i < Entities.Count; i++)
+                    if (returnObjects.Count > 0)
                     {
-
-                        if (x != i)
-                        {
-                            SAT.PolygonVsPolygon(Entities[i], Entities[x]);
-
-                            if (SAT.Intersect)
+                        coli = true;
+                            for (int x = i; x < Entities.Count; x++)
                             {
-                                Entities[i].Position += SAT.MTV;
-                                Entities[x].Position -= SAT.MTV;
-                            }
+
+                                if (x != i)
+                                {
+                                    SAT.PolygonVsPolygon(Entities[i], Entities[x]);
+
+                                    if (SAT.Intersect)
+                                    {
+                                        Entities[i].Position += SAT.MTV;
+                                        Entities[x].Position -= SAT.MTV;
+                                    }
+                                }
+                            
                         }
+
+                    }
+                    else
+                    {
+                        coli = false;
                     }
                 }
+
             }
+        }
             
 
         /// <summary>
@@ -151,21 +177,37 @@ namespace GameEngine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (SAT.Intersect == true)
+            if (coli == true)
             {
-                GraphicsDevice.Clear(Color.Blue);
+                GraphicsDevice.Clear(Color.Red);
+                coli = false;
             }
-            else GraphicsDevice.Clear(Color.AntiqueWhite);
+            else
+            {
+                GraphicsDevice.Clear(Color.AntiqueWhite);
+            }
+            
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+
+
+
+            quad.Draw(spriteBatch, lineTexture);
+
+            for (int e = 0; e < Entities.Count; e++)
+            {
+                Entities[e].Update();
+            }
 
             Square.Draw(spriteBatch);
             player.Draw(spriteBatch);
             ball1.Draw(spriteBatch);
             ball2.Draw(spriteBatch);
+
             IList<Vector2> ballPoints = Square.Point();
             IList<Vector2> playerPoints = player.Point();
+
             for (int i = 0; i < ballPoints.Count; i++)
             {
                 DrawLine(
