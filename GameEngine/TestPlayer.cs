@@ -93,7 +93,6 @@ namespace GameEngine
         {
             //Draws the object on screen
             spriteBatch.Draw(Texture, Points[0], Color.BlueViolet);
-            //test();
         }
         
         public void CollisionDetection()

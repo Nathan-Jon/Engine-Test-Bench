@@ -61,7 +61,6 @@ namespace GameEngine
         public void move()
         {
             ApplyForce(new Vector2(-ForceX, 0));
-            // Locn += velocity * facing;
         }
 
 
@@ -125,13 +124,7 @@ namespace GameEngine
            // move();
             setPoints();
             CollisionDetection();
-            UpdatePhysics();
-        }
-
-        public float Radius()
-        {
-            float radius = Texture.Width / 2;
-            return radius;
+            //UpdatePhysics();
         }
 
         public Vector2 Center()

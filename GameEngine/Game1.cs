@@ -61,10 +61,12 @@ namespace GameEngine
             player = new TestPlayer();
             ball1 = new Square();
             ball2 = new Square();
+
             Entities.Add(player);
             Entities.Add(Square);
             Entities.Add(ball1);
             Entities.Add(ball2);
+
             quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             this.IsMouseVisible = true;
@@ -125,22 +127,46 @@ namespace GameEngine
             base.Update(gameTime);
 
 
+            quad.Clear();
             for (int i = 0; i < Entities.Count; i++)
             {
-                for (int x = i; x < Entities.Count; x++)
+                quad.Insert(Entities[i]);
+            }
+
+            List<IAsset> returnObjects = new List<IAsset>();
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                returnObjects.Clear();
+                returnObjects = quad.retrieve(returnObjects, Entities[i]);
+
+                if (player == Entities[i])
                 {
-
-                    if (x != i)
+                    if (returnObjects.Count > 0)
                     {
-                        SAT.PolygonVsPolygon(Entities[i], Entities[x]);
+                        coli = true;
+                            for (int x = i; x < Entities.Count; x++)
+                            {
 
-                        if (SAT.Intersect)
-                        {
-                            Entities[i].Position += SAT.MTV;
-                            Entities[x].Position -= SAT.MTV;
+                                if (x != i)
+                                {
+                                    SAT.PolygonVsPolygon(Entities[i], Entities[x]);
+
+                                    if (SAT.Intersect)
+                                    {
+                                        Entities[i].Position += SAT.MTV;
+                                        Entities[x].Position -= SAT.MTV;
+                                    }
+                                }
+                            
                         }
+
+                    }
+                    else
+                    {
+                        coli = false;
                     }
                 }
+
             }
         }
             
@@ -166,37 +192,7 @@ namespace GameEngine
             spriteBatch.Begin();
 
 
-            quad.Clear();
-            for (int i = 0; i < Entities.Count; i++)
-            {
-                quad.Insert(Entities[i]);
-            }
 
-            List<IAsset> returnObjects = new List<IAsset>();
-            for (int i = 0; i < Entities.Count; i++)
-            {
-                returnObjects.Clear();
-                returnObjects = quad.retrieve(returnObjects, Entities[i]);
-                
-                if (player == Entities[i])
-                {
-                    if (returnObjects.Count > 0)
-                    {
-                        coli = true;
-                    }
-                    else
-                    {
-                        coli = false;
-                    }
-                }
-         
-
-                //for (int x = 0; x <= returnObjects.Count; x++)
-                //{
-                //    coli = true;
-                //}
-
-            }
             quad.Draw(spriteBatch, lineTexture);
 
             for (int e = 0; e < Entities.Count; e++)
@@ -208,8 +204,10 @@ namespace GameEngine
             player.Draw(spriteBatch);
             ball1.Draw(spriteBatch);
             ball2.Draw(spriteBatch);
+
             IList<Vector2> ballPoints = Square.Point();
             IList<Vector2> playerPoints = player.Point();
+
             for (int i = 0; i < ballPoints.Count; i++)
             {
                 DrawLine(
