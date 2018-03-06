@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
     class TestPlayer : AssetBase, IAsset
     {
-
-        public float ForceX = 2;
-        public float ForceY = 2;
+        string tag = "square";
+        public float ForceX = 5;
+        public float ForceY = 5;
 
         //Create variables for the points
         //List to Store pont Variables
@@ -22,6 +22,14 @@ namespace GameEngine
         Vector2 _point2;
         Vector2 _point3;
         Vector2 _point4;
+
+        public TestPlayer(string name)
+        {
+            tag = name;
+        }
+
+        public string getTag()
+        { return tag; }
 
         public void KeyBoardMove()
         {
@@ -43,6 +51,12 @@ namespace GameEngine
             {
                 ApplyForce(new Vector2(0,ForceY));
             }
+            if (state.IsKeyDown(Keys.Space))
+            {
+                ApplyForce(new Vector2(0, ForceY));
+
+            }
+
         }
 
         public void SetPoints()
