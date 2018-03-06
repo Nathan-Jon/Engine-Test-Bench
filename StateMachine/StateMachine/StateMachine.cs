@@ -3,14 +3,21 @@ using System.Collections.Generic;
 
 namespace StateMachine.StateMachine
 {
+    /// <summary>
+    /// State Machines Handle used to store and manage different State classes
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class StateMachine<T> : IStateMachine
     {
         #region Variables
 
-        private IDictionary<Type, IState> states;
+        //Dictionary to hold the different State classes
+        private IDictionary<Type, IState> States;
 
-        private Type currentState;
+        //Generic Type ActiveState
+        private Type ActiveState;
 
+        //To Store the entity which this state machine belongs to
         private T Entity;
 
 
@@ -18,47 +25,78 @@ namespace StateMachine.StateMachine
 
         #region Methods
 
+        /// <summary>
+        /// Construtor for the State Machine, Requires the Entity this state machine belongs to
+        /// </summary>
+        /// <param name="entity"></param>
         public StateMachine(T entity)
         {
+            //Initialise Variables
             this.Entity = entity;
-            currentState = null;
-            states = new Dictionary<Type, IState>();
+            ActiveState = null;
+            States = new Dictionary<Type, IState>();
         }
 
+        /// <summary>
+        /// Add States to the States Dictionary
+        /// </summary>
+        /// <param name="state"></param>
         public void AddState(IState state)
         {
-            if (states.Count == 0)
+            //If the Dictionary is empty
+            if (States.Count == 0)
             {
-                currentState = state.GetType();
+                //The Active State is the State being passed
+                ActiveState = state.GetType();
+                //Call the States Enter Method
                 state.Enter(Entity);
             }
 
-            if (!CheckState(state.GetType()))
+            //If the Dictionary doesnt hold a copy of this State
+            if (!HoldsState(state.GetType()))
             {
-                states.Add(state.GetType(), state);
+                //Add this State to the dictionary
+                States.Add(state.GetType(), state);
             }
 
         }
 
+        /// <summary>
+        /// Update Method for State Machine
+        /// </summary>
         public void Update()
         {
-
-            states[currentState].Update(Entity);
+            //Update the stae in the dictionary of Type currentState
+            States[ActiveState].Update(Entity);
         }
 
 
-        private bool CheckState(Type State)
+        /// <summary>
+        /// Looks to see whether or not the Dictionary holds a State
+        /// </summary>
+        /// <param name="State"></param>
+        /// <returns></returns>
+        private bool HoldsState(Type State)
         {
-            return states.ContainsKey(State);
+            //Returns the state in the dictionary based on the Key passed
+            return States.ContainsKey(State); 
         }
 
+        /// <summary>
+        /// When called, Changes the Current State, calls the exit method and the enter method
+        /// </summary>
+        /// <param name="changeto"></param>
         private void ChangeState(Type changeto)
         {
+            //If the type isnt null
             if (changeto != null)
             {
-                states[currentState].Exit(Entity);
-                currentState = changeto;
-                states[currentState].Enter(Entity);
+                //Caal the exit behaviour of the current state
+                States[ActiveState].Exit(Entity);
+                //Change the current to state to the Type being passed into the method
+                ActiveState = changeto;
+                //Call The Update method of the new currentState from the dictionary
+                States[ActiveState].Enter(Entity);
             }
         }
 
