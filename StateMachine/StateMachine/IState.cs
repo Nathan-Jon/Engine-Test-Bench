@@ -5,10 +5,13 @@ using System.Text;
 
 namespace StateMachine.StateMachine
 {
+    /// <summary>
+    /// Interface required for all State Classes
+    /// </summary>
     public interface IState
     {
-        void Enter<T>(T Entity);
-        void Update<T>(T Entity);
-        void Exit<T>(T Entity);
+        void Enter<T>(T Entity);    //Called Upon Entrance of State
+        void Update<T>(T Entity);   //Update method of state
+        void Exit<T>(T Entity);     //Called upon Exiting of state
     }
 }
