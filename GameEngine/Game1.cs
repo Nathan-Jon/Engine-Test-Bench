@@ -132,48 +132,6 @@ namespace DemonstrationEngine
             base.Update(gameTime);
 
             CollisionMgr.Update();
-            //    quad.Clear();
-            //    for (int i = 0; i < Entities.Count; i++)
-            //    {
-            //        quad.Insert(Entities[i]);
-            //    }
-
-            //    List<IAsset> returnObjects = new List<IAsset>();
-            //    for (int i = 0; i < Entities.Count; i++)
-            //    {
-            //        returnObjects.Clear();
-            //        returnObjects = quad.retrieve(returnObjects, Entities[i]);
-
-            //        if (player == Entities[i])
-            //        {
-            //            if (returnObjects.Count > 0)
-            //            {
-            //                coli = true;
-            //                    for (int x = i; x < Entities.Count; x++)
-            //                    {
-
-            //                        if (x != i)
-            //                        {
-            //                            SAT.PolygonVsPolygon(Entities[i], Entities[x]);
-
-            //                            if (SAT.Intersect)
-            //                            {
-            //                                Entities[i].Position += SAT.MTV;
-            //                                Entities[x].Position -= SAT.MTV;
-            //                            }
-            //                        }
-
-            //                }
-
-            //            }
-            //            else
-            //            {
-            //                coli = false;
-            //            }
-            //        }
-
-            //    }
-            //}
 
             for (int e = 0; e < Entities.Count; e++)
             {
@@ -189,15 +147,8 @@ namespace DemonstrationEngine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (coli == true)
-            {
-                GraphicsDevice.Clear(Color.Red);
-                coli = false;
-            }
-            else
-            {
                 GraphicsDevice.Clear(Color.AntiqueWhite);
-            }
+            
             
 
             // TODO: Add your drawing code here
