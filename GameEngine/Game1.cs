@@ -4,11 +4,10 @@ using Microsoft.Xna.Framework.Input;
 using Color = Microsoft.Xna.Framework.Color;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using DemonstrationEngine.CollisionManagement;
 
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
     /// <summary>
     /// This is the main type for your game.
@@ -16,26 +15,27 @@ namespace GameEngine
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public static SpriteBatch spriteBatch;
         public static int ScreenHeight, ScreenWidth;
 
-        private Texture2D lineTexture;
+        public static Texture2D lineTexture;
 
         IAsset Square;
         IAsset player;
         IAsset ball1;
         IAsset ball2;
-        NewSAT SAT;
+        SAT_CLass SAT;
         QuadTree quad;
-        bool coli = false;
+        public static bool coli = false;
         List<IAsset> Entities = new List<IAsset>();
-
-
+        CollisionManager CollisionMgr;
+        public static List<QuadTree> quadList;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            quadList = new List<QuadTree>();
 
             graphics.PreferredBackBufferHeight = 600;
             graphics.PreferredBackBufferWidth = 900;
@@ -55,19 +55,20 @@ namespace GameEngine
             lineTexture = new Texture2D(this.GraphicsDevice, 1, 1);
             lineTexture.SetData<Color>(new Color[] { Color.Green });
 
-            SAT = new NewSAT();
-
-            Square = new Square();
-            player = new TestPlayer();
-            ball1 = new Square();
-            ball2 = new Square();
+            //    SAT = new SAT_CLass();
+            //  quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
+            CollisionMgr = new CollisionManager();
+            
+            Square = new Square("Top Left Square");
+            player = new TestPlayer("Player");
+            ball1 = new Square("Bottom Right Square");
+            ball2 = new Square("ringading");
 
             Entities.Add(player);
             Entities.Add(Square);
             Entities.Add(ball1);
             Entities.Add(ball2);
 
-            quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
 
             this.IsMouseVisible = true;
 
@@ -84,17 +85,21 @@ namespace GameEngine
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Square.setPos(new Vector2 (100, 100));
+            Square.setPos(new Vector2 (50, 50));
             Square.setTex(Content.Load<Texture2D>("square"));
+            CollisionMgr.hasCollisions(Square);
 
-            player.setPos(new Vector2(200, 200));
+            player.setPos(new Vector2(200, 100));
             player.setTex(Content.Load<Texture2D>("square"));
+            CollisionMgr.hasCollisions(player);
 
-            ball1.setPos(new Vector2(300, 300));
+            ball1.setPos(new Vector2(500, 500));
             ball1.setTex(Content.Load<Texture2D>("square"));
+            CollisionMgr.hasCollisions(ball1);
 
-            ball2.setPos(new Vector2(400, 400));
+            ball2.setPos(new Vector2(600, 500));
             ball2.setTex(Content.Load<Texture2D>("square"));
+            CollisionMgr.hasCollisions(ball2);
 
 
 
@@ -126,48 +131,55 @@ namespace GameEngine
             // TODO: Add your update logic here
             base.Update(gameTime);
 
+            CollisionMgr.Update();
+            //    quad.Clear();
+            //    for (int i = 0; i < Entities.Count; i++)
+            //    {
+            //        quad.Insert(Entities[i]);
+            //    }
 
-            quad.Clear();
-            for (int i = 0; i < Entities.Count; i++)
+            //    List<IAsset> returnObjects = new List<IAsset>();
+            //    for (int i = 0; i < Entities.Count; i++)
+            //    {
+            //        returnObjects.Clear();
+            //        returnObjects = quad.retrieve(returnObjects, Entities[i]);
+
+            //        if (player == Entities[i])
+            //        {
+            //            if (returnObjects.Count > 0)
+            //            {
+            //                coli = true;
+            //                    for (int x = i; x < Entities.Count; x++)
+            //                    {
+
+            //                        if (x != i)
+            //                        {
+            //                            SAT.PolygonVsPolygon(Entities[i], Entities[x]);
+
+            //                            if (SAT.Intersect)
+            //                            {
+            //                                Entities[i].Position += SAT.MTV;
+            //                                Entities[x].Position -= SAT.MTV;
+            //                            }
+            //                        }
+
+            //                }
+
+            //            }
+            //            else
+            //            {
+            //                coli = false;
+            //            }
+            //        }
+
+            //    }
+            //}
+
+            for (int e = 0; e < Entities.Count; e++)
             {
-                quad.Insert(Entities[i]);
+                Entities[e].Update();
             }
 
-            List<IAsset> returnObjects = new List<IAsset>();
-            for (int i = 0; i < Entities.Count; i++)
-            {
-                returnObjects.Clear();
-                returnObjects = quad.retrieve(returnObjects, Entities[i]);
-
-                if (player == Entities[i])
-                {
-                    if (returnObjects.Count > 0)
-                    {
-                        coli = true;
-                            for (int x = i; x < Entities.Count; x++)
-                            {
-
-                                if (x != i)
-                                {
-                                    SAT.PolygonVsPolygon(Entities[i], Entities[x]);
-
-                                    if (SAT.Intersect)
-                                    {
-                                        Entities[i].Position += SAT.MTV;
-                                        Entities[x].Position -= SAT.MTV;
-                                    }
-                                }
-                            
-                        }
-
-                    }
-                    else
-                    {
-                        coli = false;
-                    }
-                }
-
-            }
         }
             
 
@@ -193,12 +205,9 @@ namespace GameEngine
 
 
 
-            quad.Draw(spriteBatch, lineTexture);
+            //quad.Draw(spriteBatch, lineTexture);
 
-            for (int e = 0; e < Entities.Count; e++)
-            {
-                Entities[e].Update();
-            }
+
 
             Square.Draw(spriteBatch);
             player.Draw(spriteBatch);
@@ -220,6 +229,10 @@ namespace GameEngine
                 DrawLine(
                     spriteBatch, playerPoints[i], playerPoints[i + 1 == playerPoints.Count ? 0 : i + 1]
                 );
+            }
+            foreach(QuadTree quads in quadList)
+            {
+                quads.Draw(spriteBatch, lineTexture);
             }
 
             spriteBatch.End();

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
     public interface IAsset
     {
@@ -11,12 +11,14 @@ namespace GameEngine
         void setPos(Vector2 locn);
         void setTex(Texture2D tex);
         void Update();
+        string getTag();
         List<Vector2> Point();
         List<Vector2> Edges();
         Vector2 Center();
         Vector2 Velocity();
         Vector2 Position { get; set; }
         Texture2D Texture { get; set; }
+        void ApplyImpulse(Vector2 closingVelo);
 
     }
 }

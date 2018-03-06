@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
 #if WINDOWS || LINUX
     /// <summary>

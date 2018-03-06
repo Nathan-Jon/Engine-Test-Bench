@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame;
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
     class AssetBase
     {
@@ -21,16 +22,14 @@ namespace GameEngine
         public float Restitution = 1f;
         public float Damping = 0.5f;
 
-
-
         public void ApplyForce(Vector2 force)
         {
             Acceleration += force * InverseMass;
         }
 
-        public void ApplyImpulse(Vector2 closingVelo)
+        public void ApplyImpulse(Vector2 closingVelocity)
         {
-            Velocity = closingVelo * Restitution;
+            Velocity = closingVelocity * Restitution;
         }
 
         public void UpdatePhysics()

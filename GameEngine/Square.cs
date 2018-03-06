@@ -6,11 +6,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace GameEngine
+namespace DemonstrationEngine
 {
     class Square : AssetBase, IAsset
     {
 
+        public string tag = "Player";
         public float ForceX = 1;
         public float ForceY = 2;
 
@@ -24,6 +25,10 @@ namespace GameEngine
         Vector2 _point4;
 
 
+        public Square(string name)
+        {
+            tag = name;
+        }
 
         //STORE THE POINTS IN THE VARIABLES
         public void setPoints()
@@ -57,6 +62,8 @@ namespace GameEngine
         {
             Texture = tex;
         }
+        public string getTag()
+        { return tag; }
 
         public void move()
         {
@@ -124,7 +131,7 @@ namespace GameEngine
            // move();
             setPoints();
             CollisionDetection();
-            //UpdatePhysics();
+            UpdatePhysics();
         }
 
         public Vector2 Center()
