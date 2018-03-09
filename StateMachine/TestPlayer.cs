@@ -5,14 +5,15 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StateMachine.StateMachine;
 
 namespace GameEngine
 {
     class TestPlayer : AssetBase, IAsset
     {
 
-        public float ForceX = 2;
-        public float ForceY = 2;
+        public float ForceX = 5;
+        public float ForceY = 5;
 
         //Create variables for the points
         //List to Store pont Variables
@@ -22,6 +23,48 @@ namespace GameEngine
         Vector2 _point2;
         Vector2 _point3;
         Vector2 _point4;
+
+        public TestPlayer()
+        {
+           StateMachine<IAsset> stateMachine = new StateMachine<IAsset>(this);
+        
+            stateMachine.AddMethodTransition(stateChange, "state1", "state2");
+            stateMachine.AddMethodTransition(stateChange2, "state2", "state1");
+           
+
+        }
+
+
+
+        //State Methods
+        bool stateChange()
+        {
+            if (Position.X > 300)
+                return true;
+            return false;
+        }
+        bool stateChange2()
+        {
+            if (Position.X < 300)
+                return true;
+            return false;
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public void KeyBoardMove()
         {

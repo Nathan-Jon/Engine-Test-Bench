@@ -17,3 +17,10 @@ C:\Users\User\Desktop\StateMachine\StateMachine\obj\x86\Debug\StateMachine.pdb
 C:\Users\User\Desktop\StateMachine\StateMachine\bin\WindowsGL\Debug\Content\squareani.png
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\obj\x86\Debug\StateMachine.exe
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\obj\x86\Debug\StateMachine.pdb
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\Content\squareani.png
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\Content\square.png
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\StateMachine.exe
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\StateMachine.pdb
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\bin\WindowsGL\Debug\OpenTK.dll
+C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\StateMachine\obj\x86\Debug\StateMachine.csprojResolveAssemblyReference.cache
