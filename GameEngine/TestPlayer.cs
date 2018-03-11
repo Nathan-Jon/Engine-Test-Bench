@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DemonstrationEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StateMachine.StateMachine;
+using StateMachine.StateMachine.States;
 
-namespace DemonstrationEngine
+namespace GameEngine
 {
     class TestPlayer : AssetBase, IAsset
     {
-        string tag = "square";
+
+        private IStateMachine<IAsset> stateMachine;
+
+        private string tag;
         public float ForceX = 5;
         public float ForceY = 5;
 
@@ -26,10 +32,65 @@ namespace DemonstrationEngine
         public TestPlayer(string name)
         {
             tag = name;
+
+           stateMachine = new StateMachine<IAsset>(this);
+
+            stateMachine.AddState(new JumpState<IAsset>(), "jump");
+            stateMachine.AddState(new FallState<IAsset>(), "fall");
+            stateMachine.AddState(new MoveLeft<IAsset>(), "left");
+            stateMachine.AddState(new MoveRight<IAsset>(), "right");
+
+            stateMachine.AddMethodTransition(stateChange, "jump", "fall");
+            stateMachine.AddMethodTransition(stateChange2, "fall", "jump");
+            stateMachine.AddMethodTransition(testChange, "fall", "left");
+            stateMachine.AddMethodTransition(stateChange3, "left", "right");
+            stateMachine.AddMethodTransition(stateChange4, "right", "left");
         }
 
-        public string getTag()
-        { return tag; }
+
+
+        //State Methods
+        bool stateChange()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+        bool stateChange2()
+        {
+            return false;
+        }
+        bool stateChange3()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+        bool stateChange4()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+        bool testChange()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         public void KeyBoardMove()
         {
@@ -51,12 +112,6 @@ namespace DemonstrationEngine
             {
                 ApplyForce(new Vector2(0,ForceY));
             }
-            if (state.IsKeyDown(Keys.Space))
-            {
-                ApplyForce(new Vector2(0, ForceY));
-
-            }
-
         }
 
         public void SetPoints()
@@ -138,6 +193,7 @@ namespace DemonstrationEngine
             KeyBoardMove();          
             CollisionDetection();
             UpdatePhysics();
+            stateMachine.Update();
         }
 
         public float Radius()
@@ -190,6 +246,11 @@ namespace DemonstrationEngine
         public void setTex(Texture2D tex)
         {
             Texture = tex;
+        }
+
+        public string getTag()
+        {
+            return tag;
         }
     }
 }

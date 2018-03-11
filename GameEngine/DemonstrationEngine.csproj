@@ -41,6 +41,16 @@
     <Compile Include="Collision Management\CollisionManager.cs" />
     <Compile Include="Collision Management\ICollidable.cs" />
     <Compile Include="IAsset.cs" />
+    <Compile Include="StateMachines\IState.cs" />
+    <Compile Include="StateMachines\IStateMachine.cs" />
+    <Compile Include="StateMachines\Transition Classes\ITransitionHandler.cs" />
+    <Compile Include="StateMachines\Transition Classes\MethodTransition.cs" />
+    <Compile Include="StateMachines\Transition Classes\TransitionHandler.cs" />
+    <Compile Include="StateMachines\StateMachine.cs" />
+    <Compile Include="StateMachines\States\FallState.cs" />
+    <Compile Include="StateMachines\States\JumpState.cs" />
+    <Compile Include="StateMachines\States\MoveLeft.cs" />
+    <Compile Include="StateMachines\States\MoveRight.cs" />
     <Compile Include="SAT_CLass.cs" />
     <Compile Include="AssetBase.cs" />
     <Compile Include="QuadTree.cs" />

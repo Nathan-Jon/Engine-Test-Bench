@@ -7,7 +7,6 @@ C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\Windows
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\GameEngine.pdb
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\MonoGame.Framework.dll
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\OpenTK.dll
-C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.csprojResolveAssemblyReference.cache
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\GameEngine.exe
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\GameEngine.pdb
 C:\Users\Nathan\Desktop\SAT\GameEngine\obj\x86\Debug\GameEngine.exe

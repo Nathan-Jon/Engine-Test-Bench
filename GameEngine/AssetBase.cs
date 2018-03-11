@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame;
+using OpenTK.Graphics;
 
-namespace DemonstrationEngine
+namespace GameEngine
 {
     class AssetBase
     {
@@ -14,22 +14,31 @@ namespace DemonstrationEngine
         public Vector2 Velocity { get; set; }
         public Texture2D Texture { get; set; }
         public Vector2 Acceleration;
-        public Vector2 Gravity = new Vector2(0, 0);
+        public Vector2 Gravity { get; set; }
 
+        public bool GravityBool = true;
+        public void SetGravity(bool setG)
+        {
+            GravityBool = setG;
+        }
 
         //Inverse mass to encourage multiplication and not diviision due to multiplication being faster
         public float InverseMass =  -1.5f;
         public float Restitution = 1f;
         public float Damping = 0.5f;
 
+
+
         public void ApplyForce(Vector2 force)
         {
+            //Multiply force by the inversemass to obtain the acceleration value
             Acceleration += force * InverseMass;
         }
 
-        public void ApplyImpulse(Vector2 closingVelocity)
+        public void ApplyImpulse(Vector2 closingVelo)
         {
-            Velocity = closingVelocity * Restitution;
+            //Apply Impulse by setting the velocy to the closing velocity by the Restitution of the entity
+            Velocity = closingVelo * Restitution;
         }
 
         public void UpdatePhysics()
@@ -37,6 +46,14 @@ namespace DemonstrationEngine
             Velocity += Acceleration;
             Velocity *= Damping;
             Position += Velocity;
+            
+            //Apply Gravity
+            if(GravityBool)
+            { Gravity = new Vector2(0,5);}
+            else
+            {
+                Gravity = new Vector2(0,-5);
+            }
             Acceleration = Gravity;
         }
 

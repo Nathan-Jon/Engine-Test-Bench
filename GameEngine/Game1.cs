@@ -5,6 +5,7 @@ using Color = Microsoft.Xna.Framework.Color;
 using System;
 using System.Collections.Generic;
 using DemonstrationEngine.CollisionManagement;
+using GameEngine;
 
 
 namespace DemonstrationEngine
