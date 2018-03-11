@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DemonstrationEngine;
-using GameEngine;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace StateMachine.StateMachine.States
+namespace DemonstrationEngine.StateMachines.States
 {
     class MoveRight<T> : IState<T> where T: IAsset 
     {

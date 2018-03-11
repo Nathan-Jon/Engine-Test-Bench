@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GameEngine;
+using DemonstrationEngine;
+using DemonstrationEngine.Collision_Management;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace DemonstrationEngine
 {
-    class Square : AssetBase, IAsset
+    class Square : AssetBase, IAsset, ICollidable
     {
 
         public string tag = "Player";
@@ -171,6 +169,11 @@ namespace DemonstrationEngine
         public Vector2 Velocity()
         {
             return new Vector2(0, 0);
+        }
+
+        public void hasCollisions(IAsset asset)
+        {
+            
         }
     }
 }

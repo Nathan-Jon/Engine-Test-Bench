@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DemonstrationEngine;
+using DemonstrationEngine.Collision_Management;
+using DemonstrationEngine.StateMachines;
+using DemonstrationEngine.StateMachines.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using StateMachine.StateMachine;
-using StateMachine.StateMachine.States;
 
-namespace GameEngine
+
+namespace DemonstrationEngine
 {
-    class TestPlayer : AssetBase, IAsset
+    class TestPlayer : AssetBase, IAsset, ICollidable
     {
 
         private IStateMachine<IAsset> stateMachine;
@@ -35,14 +34,9 @@ namespace GameEngine
 
            stateMachine = new StateMachine<IAsset>(this);
 
-            stateMachine.AddState(new JumpState<IAsset>(), "jump");
-            stateMachine.AddState(new FallState<IAsset>(), "fall");
             stateMachine.AddState(new MoveLeft<IAsset>(), "left");
             stateMachine.AddState(new MoveRight<IAsset>(), "right");
 
-            stateMachine.AddMethodTransition(stateChange, "jump", "fall");
-            stateMachine.AddMethodTransition(stateChange2, "fall", "jump");
-            stateMachine.AddMethodTransition(testChange, "fall", "left");
             stateMachine.AddMethodTransition(stateChange3, "left", "right");
             stateMachine.AddMethodTransition(stateChange4, "right", "left");
         }
@@ -50,19 +44,6 @@ namespace GameEngine
 
 
         //State Methods
-        bool stateChange()
-        {
-            KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Enter))
-            {
-                return true;
-            }
-            return false;
-        }
-        bool stateChange2()
-        {
-            return false;
-        }
         bool stateChange3()
         {
             KeyboardState state = Keyboard.GetState();
@@ -73,15 +54,6 @@ namespace GameEngine
             return false;
         }
         bool stateChange4()
-        {
-            KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Enter))
-            {
-                return true;
-            }
-            return false;
-        }
-        bool testChange()
         {
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Enter))
@@ -251,6 +223,11 @@ namespace GameEngine
         public string getTag()
         {
             return tag;
+        }
+
+        public void hasCollisions(IAsset asset)
+        {
+            
         }
     }
 }

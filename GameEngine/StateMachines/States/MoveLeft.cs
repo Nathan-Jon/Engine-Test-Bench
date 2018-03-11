@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DemonstrationEngine;
-using GameEngine;
+
 using Microsoft.Xna.Framework;
 
-namespace StateMachine.StateMachine.States
+namespace DemonstrationEngine.StateMachines.States
 {
     class MoveLeft<T> : IState<T> where T: IAsset 
     {
@@ -24,7 +20,7 @@ namespace StateMachine.StateMachine.States
 
         public void Exit(T entity)
         {
-
+            Console.WriteLine("Living life to the fullest");
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using StateMachine.StateMachine.TransitionMethods;
+using DemonstrationEngine.StateMachines.Transition_Classes;
 
-namespace StateMachine.StateMachine
+namespace DemonstrationEngine.StateMachines
 {
     /// <summary>
     /// State Machines Handle used to store and manage different State classes

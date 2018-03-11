@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GameEngine;
+﻿
 
-namespace StateMachine.StateMachine
+namespace DemonstrationEngine.StateMachines
 {
     /// <summary>
     /// Interface required for all State Classes

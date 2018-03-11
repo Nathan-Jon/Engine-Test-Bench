@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace StateMachine.StateMachine
+namespace DemonstrationEngine.StateMachines
 {
     /// <summary>
     /// Interface for State Machine. Used for Adding States an calling the Update

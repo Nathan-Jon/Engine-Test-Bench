@@ -8,7 +8,7 @@ using System.Text;
 /// <summary>
 /// Collision Manager which controls collision detection, and what objects can collide with one and other
 /// </summary>
-namespace DemonstrationEngine.CollisionManagement
+namespace DemonstrationEngine.Collision_Management
 {
     public class CollisionManager : ICollidable
     {
@@ -57,13 +57,17 @@ namespace DemonstrationEngine.CollisionManagement
 
                     for (int u = 0; u < WillCollide.Count; u++)
                     {
+                        if (CollidableObjects[i] == typeof(ICollidable)) //&& WillCollide[u] == typeof(ICollidable))
+                        {
+                            SAT.PolygonVsPolygon(CollidableObjects[i], WillCollide[u]);
+                        }
 
-                        SAT.PolygonVsPolygon(CollidableObjects[i], WillCollide[u]);
                         if (SAT.Intersect)
                         {
                             CollidableObjects[i].Position += SAT.MTV;
                         }
-                    }                
+                    }
+                                
                 }
             }
         }

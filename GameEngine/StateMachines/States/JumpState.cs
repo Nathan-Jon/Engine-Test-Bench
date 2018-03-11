@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using DemonstrationEngine;
-using GameEngine;
 
-namespace StateMachine.StateMachine.States
+namespace DemonstrationEngine.StateMachines.States
 {
     class JumpState<T>: IState<T> where T : IAsset
     {

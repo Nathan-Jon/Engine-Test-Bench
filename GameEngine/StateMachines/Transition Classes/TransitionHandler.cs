@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using StateMachine.StateMachine.TransitionMethods;
 
-namespace StateMachine.StateMachine
+namespace DemonstrationEngine.StateMachines.Transition_Classes
 {
     /// <summary>
     /// Stores the transition Conditions for a stateMachine

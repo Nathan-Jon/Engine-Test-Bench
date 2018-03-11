@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace StateMachine.StateMachine.TransitionMethods
+namespace DemonstrationEngine.StateMachines.Transition_Classes
 {
     internal class MethodTransition
     {

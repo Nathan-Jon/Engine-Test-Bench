@@ -4,8 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Color = Microsoft.Xna.Framework.Color;
 using System;
 using System.Collections.Generic;
-using DemonstrationEngine.CollisionManagement;
-using GameEngine;
+using DemonstrationEngine.Collision_Management;
 
 
 namespace DemonstrationEngine

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DemonstrationEngine
+
 {
     public class QuadTree
     {
@@ -179,29 +178,6 @@ namespace DemonstrationEngine
             }
             returnObjects = returnObjects.Distinct().ToList();
             return returnObjects; // Return the return Objects list
-
-
-
-            //int Index = GetIndex(Entity); // Index is the index value of the entity
-            //if (Index != -1 && nodes[0] != null) //If the index isn't -1
-            //{
-            //    nodes[Index].Retrieve(returnObjects, Entity); // Call retrieve from the node which holds this entity
-            //}
-            //else if (nodes[0] != null)      //If there are nodes below this quad
-            //{
-            //    foreach (QuadTree node in nodes)
-            //    {
-            //        node.Retrieve(returnObjects, Entity); // Call the retrieve method for each Node
-            //    }
-            //}
-
-            //foreach (IAsset item in objects)     // For each Asset in the Objects list
-            //{
-            //    if (item != Entity)             //If the item isn't the one being passed to this method
-            //        returnObjects.Add(item);    //Add the asset to the return Objects list
-            //}
-
-            //return returnObjects; // Return the return Objects list
         }
 
 

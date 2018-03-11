@@ -8,8 +8,8 @@
     <ProjectGuid>{5057F609-F090-4D44-9575-8E94D1F37137}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameEngine</RootNamespace>
-    <AssemblyName>GameEngine</AssemblyName>
+    <RootNamespace>DemonstrationEngine</RootNamespace>
+    <AssemblyName>DemonstrationEngine</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>WindowsGL</MonoGamePlatform>
     <MonoGameContentBuilderExe>
@@ -41,6 +41,7 @@
     <Compile Include="Collision Management\CollisionManager.cs" />
     <Compile Include="Collision Management\ICollidable.cs" />
     <Compile Include="IAsset.cs" />
+    <Compile Include="Physics\Plane.cs" />
     <Compile Include="StateMachines\IState.cs" />
     <Compile Include="StateMachines\IStateMachine.cs" />
     <Compile Include="StateMachines\Transition Classes\ITransitionHandler.cs" />
