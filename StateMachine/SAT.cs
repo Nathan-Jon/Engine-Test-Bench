@@ -90,7 +90,7 @@ namespace GameEngine
                 }
                 //Set the MTV variable if collision             
 
-                MTV = transAxis * minInterDis;
+                MTV = 0.5*  transAxis * minInterDis;
                 
 
 

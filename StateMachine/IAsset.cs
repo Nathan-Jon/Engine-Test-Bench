@@ -11,6 +11,7 @@ namespace GameEngine
         void setPos(Vector2 locn);
         void setTex(Texture2D tex);
         void Update();
+        void ApplyForce(Vector2 force);
         List<Vector2> Point();
         List<Vector2> Edges();
         Vector2 Center();
@@ -18,5 +19,6 @@ namespace GameEngine
         Vector2 Position { get; set; }
         Texture2D Texture { get; set; }
 
+        void SetGravity(bool val);
     }
 }

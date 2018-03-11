@@ -6,11 +6,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StateMachine.StateMachine;
+using StateMachine.StateMachine.States;
 
 namespace GameEngine
 {
     class TestPlayer : AssetBase, IAsset
     {
+
+        private IStateMachine<IAsset> stateMachine;
 
         public float ForceX = 5;
         public float ForceY = 5;
@@ -26,12 +29,18 @@ namespace GameEngine
 
         public TestPlayer()
         {
-           StateMachine<IAsset> stateMachine = new StateMachine<IAsset>(this);
-        
-            stateMachine.AddMethodTransition(stateChange, "state1", "state2");
-            stateMachine.AddMethodTransition(stateChange2, "state2", "state1");
-           
+           stateMachine = new StateMachine<IAsset>(this);
 
+            stateMachine.AddState(new JumpState<IAsset>(), "jump");
+            stateMachine.AddState(new FallState<IAsset>(), "fall");
+            stateMachine.AddState(new MoveLeft<IAsset>(), "left");
+            stateMachine.AddState(new MoveRight<IAsset>(), "right");
+
+            stateMachine.AddMethodTransition(stateChange, "jump", "fall");
+            stateMachine.AddMethodTransition(stateChange2, "fall", "jump");
+            stateMachine.AddMethodTransition(testChange, "fall", "left");
+            stateMachine.AddMethodTransition(stateChange3, "left", "right");
+            stateMachine.AddMethodTransition(stateChange4, "right", "left");
         }
 
 
@@ -39,31 +48,44 @@ namespace GameEngine
         //State Methods
         bool stateChange()
         {
-            if (Position.X > 300)
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
                 return true;
+            }
             return false;
         }
         bool stateChange2()
         {
-            if (Position.X < 300)
-                return true;
             return false;
         }
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        bool stateChange3()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+        bool stateChange4()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
+        bool testChange()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Enter))
+            {
+                return true;
+            }
+            return false;
+        }
 
 
         public void KeyBoardMove()
@@ -167,6 +189,7 @@ namespace GameEngine
             KeyBoardMove();          
             CollisionDetection();
             UpdatePhysics();
+            stateMachine.Update();
         }
 
         public float Radius()

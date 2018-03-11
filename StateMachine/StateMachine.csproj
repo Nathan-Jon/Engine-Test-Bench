@@ -48,9 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateMachine\IState.cs" />
     <Compile Include="StateMachine\IStateMachine.cs" />
+    <Compile Include="StateMachine\States\FallState.cs" />
+    <Compile Include="StateMachine\States\JumpState.cs" />
+    <Compile Include="StateMachine\States\MoveLeft.cs" />
+    <Compile Include="StateMachine\States\MoveRight.cs" />
     <Compile Include="StateMachine\TransitionMethods\ITransitionHandler.cs" />
     <Compile Include="StateMachine\StateMachine.cs" />
-    <Compile Include="StateMachine\TransitionHandler.cs" />
+    <Compile Include="StateMachine\TransitionMethods\TransitionHandler.cs" />
     <Compile Include="StateMachine\TransitionMethods\MethodTransition.cs" />
     <Compile Include="TestPlayer.cs" />
   </ItemGroup>
@@ -76,6 +80,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
+  <ItemGroup />
   <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
   <Target Name="BeforeResolveReferences">
     <CreateProperty Value="$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows;$(AssemblySearchPaths)">

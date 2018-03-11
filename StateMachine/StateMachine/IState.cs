@@ -13,8 +13,8 @@ namespace StateMachine.StateMachine
     {
         bool success { get; }
 
-        void Enter<T>(T entity);    //Called Upon Entrance of State
-        void Update<T>(T entity);   //Update method of state
-        void Exit<T>(T entity);     //Called upon Exiting of state
+        void Enter(T entity);    //Called Upon Entrance of State
+        void Update(T entity);   //Update method of state
+        void Exit(T entity);     //Called upon Exiting of state
     }
 }

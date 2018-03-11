@@ -21,7 +21,7 @@ namespace StateMachine.StateMachine
         private string ActiveState;
 
         //To Store the entity which this state machine belongs to
-        private T Entity;
+        private T Holder;
 
 
         #endregion
@@ -36,7 +36,7 @@ namespace StateMachine.StateMachine
         public StateMachine(T entity)
         {
             //Initialise Variables
-            this.Entity = entity;
+            Holder = entity;
             ActiveState = null;
             States = new Dictionary<string, IState<T>>();
             Transitions = new Dictionary<string, ITransitionHandler>();
@@ -54,7 +54,7 @@ namespace StateMachine.StateMachine
                 //The Active State is the State being passed
                 ActiveState = stateID;
                 //Call the States Enter Method
-                state.Enter(Entity);
+                state.Enter(Holder);
             }
 
             //If the Dictionary doesnt hold a copy of this State
@@ -87,11 +87,11 @@ namespace StateMachine.StateMachine
             if (changeto != null)
             {
                 //Caal the exit behaviour of the current state
-                States[ActiveState].Exit(Entity);
+                States[ActiveState].Exit(Holder);
                 //Change the current to state to the Type being passed into the method
                 ActiveState = changeto;
                 //Call The Update method of the new currentState from the dictionary
-                States[ActiveState].Enter(Entity);
+                States[ActiveState].Enter(Holder);
             }
         }
 
@@ -123,7 +123,7 @@ namespace StateMachine.StateMachine
             //Check to see whether or not the dictionary holds both states and both states aren't the same
             isValidTransition(stateFrom, targetState);
             //Look to see whether or not the base transition state is currently held in the dictionary
-            HoldingState(stateFrom);
+            checkHandlerExists(stateFrom);
             //Store the method transition in the transition dictionary
             Transitions[stateFrom].StoreMethodTransition(targetState, MethodVal, ReqResult);
         }
@@ -145,8 +145,6 @@ namespace StateMachine.StateMachine
             //The transition is invalid
             return false;
 
-
-
         }
 
         /// <summary>
@@ -157,18 +155,30 @@ namespace StateMachine.StateMachine
             //Update the stae in the dictionary of Type currentState
             CheckMethodTransition();
             //Call the update method on the active state
-            //States[ActiveState].Update(Entity);
-
-
+           States[ActiveState].Update(Holder);
         }
 
 
-
+        /// <summary>
+        /// Look to see whether or not the transition requirements have been met for the Method Transitions
+        /// </summary>
         public void CheckMethodTransition()
         {
+            
             if(States.Keys.Contains(ActiveState))
                 ChangeState((Transitions[ActiveState].CheckMethodTransition()));
         }
 
+        /// <summary>
+        /// Check to see whether or not the transitions dictionary holds the transition is currently stored
+        /// </summary>
+        /// <param name="state"></param>
+        public void checkHandlerExists(string state)
+        {
+            //If the Transitions dictionary doesnt hold the transition with a key of state
+            if(!Transitions.ContainsKey(state))
+                //Add the new transition to the state
+                Transitions.Add(state, new TransitionHandler());
+        }
     }
 }
