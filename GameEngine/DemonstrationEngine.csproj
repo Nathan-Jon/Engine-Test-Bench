@@ -41,6 +41,9 @@
     <Compile Include="Collision Management\CollisionManager.cs" />
     <Compile Include="Collision Management\ICollidable.cs" />
     <Compile Include="IAsset.cs" />
+    <Compile Include="Physics\IPhysics.cs" />
+    <Compile Include="Physics\IPlane.cs" />
+    <Compile Include="Physics\PhysicsAsset.cs" />
     <Compile Include="Physics\Plane.cs" />
     <Compile Include="StateMachines\IState.cs" />
     <Compile Include="StateMachines\IStateMachine.cs" />

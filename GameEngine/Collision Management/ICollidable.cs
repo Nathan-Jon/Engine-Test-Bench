@@ -2,6 +2,5 @@
 {
     public interface ICollidable
     {
-        void hasCollisions(IAsset asset);
     }
 }

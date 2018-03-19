@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DemonstrationEngine.Physics;
+using Microsoft.Xna.Framework;
 
 namespace DemonstrationEngine.StateMachines.States
 {
-    class MoveRight<T> : IState<T> where T: IAsset 
+    class MoveRight<T> : IState<T> where T: IPhysics
     {
         public bool success { get; }
 

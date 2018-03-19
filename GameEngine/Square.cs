@@ -1,102 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using DemonstrationEngine;
-using DemonstrationEngine.Collision_Management;
+﻿using DemonstrationEngine.Collision_Management;
+using DemonstrationEngine.Physics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace DemonstrationEngine
 {
-    class Square : AssetBase, IAsset, ICollidable
+    class Square : PhysicsObject, ICollidable
     {
-
-        public string tag = "Player";
         public float ForceX = 1;
         public float ForceY = 2;
+    
 
-        //Create variables for the points
-        //List to Store pont Variables
-        private List<Vector2> Points = new List<Vector2>();
-        private List<Vector2> edges = new List<Vector2>();
-        Vector2 _point1;
-        Vector2 _point2;
-        Vector2 _point3;
-        Vector2 _point4;
-
-
-        public Square(string name)
-        {
-            tag = name;
-        }
-
-        //STORE THE POINTS IN THE VARIABLES
-        public void setPoints()
-        {
-            Points.Clear();
-
-            //Top Left
-            _point1 = new Vector2(Position.X, Position.Y);
-            //Top Right
-            _point2 = new Vector2((Position.X + Texture.Width), Position.Y);
-            //Bottom Right
-            _point3 = new Vector2((Position.X + Texture.Width), (Position.Y + Texture.Height));
-            //Bottom Left
-            _point4 = new Vector2(Position.X, (Position.Y + Texture.Height));
-
-
-            Points.Add(_point1);
-            Points.Add(_point2);
-            Points.Add(_point3);
-            Points.Add(_point4);
-
-            BuildEdges();
-        }
-     
-        public void setPos(Vector2 Posn)
-        {
-            Position = Posn;
-        }
-
-        public void setTex(Texture2D tex)
-        {
-            Texture = tex;
-        }
-        public string getTag()
-        { return tag; }
-
-        public void move()
+        public void Move()
         {
             ApplyForce(new Vector2(-ForceX, 0));
-        }
-
-
-        public void BuildEdges()
-        {
-            Vector2 p1;
-            Vector2 p2;
-
-            edges.Clear();
-            for (int i = 0; i < Points.Count; i++)
-            {
-                p1 = Points[i];
-                if (i + 1 >= Points.Count)
-                {
-                    p2 = Points[0];
-                }
-                else
-                {
-                    p2 = Points[i + 1];
-                }
-                edges.Add(p2 - p1);
-            }
-
-
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            //Draws the object on screen
-            spriteBatch.Draw(Texture, Points[0], Color.AntiqueWhite);
         }
 
         public void CollisionDetection()
@@ -125,55 +41,12 @@ namespace DemonstrationEngine
 
         }
 
-        public void Update()
+        public override void Update()
         {
            // move();
-            setPoints();
             CollisionDetection();
             UpdatePhysics();
         }
-
-        public Vector2 Center()
-        {
-
-                float totalX = 0;
-                float totalY = 0;
-                for (int i = 0; i < Points.Count; i++)
-                {
-                    totalX += Points[i].X;
-                    totalY += Points[i].Y;
-                }
-
-                return new Vector2(totalX / (float)Points.Count, totalY / (float)Points.Count);
-        }
-
-        public void Offset(Vector2 translation)
-        {
-            for (int i = 0; i < Points.Count; i++)
-            {
-                Vector2 p = Points[i];
-                Points[i] = new Vector2(p.X + translation.X, p.Y + translation.Y);
-            }
-        }
-
-        public List<Vector2> Edges()
-        {
-            return edges;
-        }
-
-        public List<Vector2> Point()
-        {
-            return Points;
-        }
-
-        public Vector2 Velocity()
-        {
-            return new Vector2(0, 0);
-        }
-
-        public void hasCollisions(IAsset asset)
-        {
-            
-        }
+        
     }
 }

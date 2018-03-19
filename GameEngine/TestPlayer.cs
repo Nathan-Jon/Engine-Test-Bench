@@ -1,141 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using DemonstrationEngine.Collision_Management;
+﻿using DemonstrationEngine.Collision_Management;
+using DemonstrationEngine.Physics;
 using DemonstrationEngine.StateMachines;
 using DemonstrationEngine.StateMachines.States;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
 namespace DemonstrationEngine
 {
-    class TestPlayer : AssetBase, IAsset, ICollidable
+    class TestPlayer : PhysicsObject, ICollidable
     {
 
-        private IStateMachine<IAsset> stateMachine;
+        private readonly IStateMachine<IPhysics> stateMachine;
 
-        private string tag;
         public float ForceX = 5;
         public float ForceY = 5;
 
-        //Create variables for the points
-        //List to Store pont Variables
-        private List<Vector2> Points = new List<Vector2>();
-        public List<Vector2> edges = new List<Vector2>();
-        Vector2 _point1;
-        Vector2 _point2;
-        Vector2 _point3;
-        Vector2 _point4;
 
-        public TestPlayer(string name)
+        public TestPlayer()
         {
-            tag = name;
+           stateMachine = new StateMachine<IPhysics>(this);
 
-           stateMachine = new StateMachine<IAsset>(this);
+            stateMachine.AddState(new MoveLeft<IPhysics>(), "left");
+            stateMachine.AddState(new MoveRight<IPhysics>(), "right");
+            stateMachine.AddState(new FallState<IPhysics>(), "down");
+            stateMachine.AddState(new JumpState<IPhysics>(), "up");
 
-            stateMachine.AddState(new MoveLeft<IAsset>(), "left");
-            stateMachine.AddState(new MoveRight<IAsset>(), "right");
-
-            stateMachine.AddMethodTransition(stateChange3, "left", "right");
-            stateMachine.AddMethodTransition(stateChange4, "right", "left");
+            stateMachine.AddMethodTransition(right, "left", "right");
+            stateMachine.AddMethodTransition(left, "right", "left");
+            stateMachine.AddMethodTransition(left, "right", "left");
+            stateMachine.AddMethodTransition(left, "right", "left");
         }
 
 
 
         //State Methods
-        bool stateChange3()
+        private bool right()
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Enter))
+            if (state.IsKeyDown(Keys.D))
+            {
+                return true;
+            }
+            return false;
+
+        }
+        private  bool left()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.A))
             {
                 return true;
             }
             return false;
         }
-        bool stateChange4()
+        private  bool down()
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Enter))
+            if (state.IsKeyDown(Keys.S))
+            {
+                return true;
+            }
+            return false;
+        }
+        private  bool up()
+        {
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.W))
             {
                 return true;
             }
             return false;
         }
 
+        //public void KeyBoardMove()
+        //{
+        //    KeyboardState state = Keyboard.GetState();
 
-        public void KeyBoardMove()
-        {
-            KeyboardState state = Keyboard.GetState();
-
-            if (state.IsKeyDown(Keys.D) || state.IsKeyDown(Keys.Right))
-            {
-                ApplyForce(new Vector2(-ForceX,0));
-            }
-            if (state.IsKeyDown(Keys.A) || state.IsKeyDown(Keys.Left))
-            {
-                ApplyForce(new Vector2(ForceX, 0));
-            }
-            if (state.IsKeyDown(Keys.S) || state.IsKeyDown(Keys.Down))
-            {
-                ApplyForce(new Vector2(0, -ForceY));
-            }
-            if (state.IsKeyDown(Keys.W) || state.IsKeyDown(Keys.Up))
-            {
-                ApplyForce(new Vector2(0,ForceY));
-            }
-        }
-
-        public void SetPoints()
-        {
-            Points.Clear();
-            //Top Left
-            _point1 = new Vector2(Position.X, Position.Y);
-            //Top Right
-            _point2 = new Vector2((Position.X + Texture.Width), Position.Y);
-            //Bottom Right
-            _point3 = new Vector2((Position.X + Texture.Width), (Position.Y + Texture.Height));
-            //Bottom Left
-            _point4 = new Vector2(Position.X, (Position.Y + Texture.Height));
-
-
-            Points.Add(_point1);
-            Points.Add(_point2);
-            Points.Add(_point3);
-            Points.Add(_point4);
-
-            BuildEdges();
-        }
-
-        public void BuildEdges()
-        {
-            Vector2 p1;
-            Vector2 p2;
-            edges.Clear();
-            for (int i = 0; i < Points.Count; i++)
-            {
-                p1 = Points[i];
-                if (i + 1 >= Points.Count)
-                {
-                    p2 = Points[0];
-                }
-                else
-                {
-                    p2 = Points[i + 1];
-                }
-                edges.Add(p2 - p1);
-            }
-
-
-
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            //Draws the object on screen
-            spriteBatch.Draw(Texture, Points[0], Color.BlueViolet);
-        }
-        
+        //    if (state.IsKeyDown(Keys.D) || state.IsKeyDown(Keys.Right))
+        //    {
+        //        ApplyForce(new Vector2(-ForceX,0));
+        //    }
+        //    if (state.IsKeyDown(Keys.A) || state.IsKeyDown(Keys.Left))
+        //    {
+        //        ApplyForce(new Vector2(ForceX, 0));
+        //    }
+        //    if (state.IsKeyDown(Keys.S) || state.IsKeyDown(Keys.Down))
+        //    {
+        //        ApplyForce(new Vector2(0, -ForceY));
+        //    }
+        //    if (state.IsKeyDown(Keys.W) || state.IsKeyDown(Keys.Up))
+        //    {
+        //        ApplyForce(new Vector2(0,ForceY));
+        //    }
+        //}
+      
         public void CollisionDetection()
         {
             //Side Of Screen//
@@ -159,10 +118,9 @@ namespace DemonstrationEngine
 
         }
 
-        public void Update()
+        public override void Update()
         {
-            SetPoints();
-            KeyBoardMove();          
+            //KeyBoardMove();          
             CollisionDetection();
             UpdatePhysics();
             stateMachine.Update();
@@ -172,62 +130,6 @@ namespace DemonstrationEngine
         {
             float radius = Texture.Width / 2;
             return radius;
-        }
-
-        public Vector2 Center()
-        {
-                float totalX = 0;
-                float totalY = 0;
-                for (int i = 0; i < Points.Count; i++)
-                {
-                    totalX += Points[i].X;
-                    totalY += Points[i].Y;
-                }
-                return new Vector2(totalX / Points.Count, totalY / Points.Count);
-        }
-
-        public void Offset(Vector2 translation)
-        {
-            for (int i = 0; i < Points.Count; i++)
-            {
-                Vector2 p = Points[i];
-                Points[i] = new Vector2(p.X + translation.X, p.Y + translation.Y);
-            }
-
-        }
-
-
-        public List<Vector2> Edges()
-        {
-            return edges;
-        }
-
-        public List<Vector2> Point()
-        {
-            return Points;
-        }
-        public Vector2 Velocity()
-        {
-            return new Vector2(0,0);
-        }
-
-        public void setPos(Vector2 locn)
-        {
-            Position = locn;
-        }
-        public void setTex(Texture2D tex)
-        {
-            Texture = tex;
-        }
-
-        public string getTag()
-        {
-            return tag;
-        }
-
-        public void hasCollisions(IAsset asset)
-        {
-            
         }
     }
 }

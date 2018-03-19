@@ -5,6 +5,7 @@ using Color = Microsoft.Xna.Framework.Color;
 using System;
 using System.Collections.Generic;
 using DemonstrationEngine.Collision_Management;
+using DemonstrationEngine.Physics;
 
 
 namespace DemonstrationEngine
@@ -24,6 +25,11 @@ namespace DemonstrationEngine
         IAsset player;
         IAsset ball1;
         IAsset ball2;
+        IAsset wallLeft;
+        IAsset wallRight;
+        IAsset wallTop;
+        IAsset wallBottom;
+
         SAT_CLass SAT;
         QuadTree quad;
         public static bool coli = false;
@@ -58,19 +64,29 @@ namespace DemonstrationEngine
             //    SAT = new SAT_CLass();
             //  quad = new QuadTree(0, new Rectangle(0, 0, ScreenWidth, ScreenHeight));
             CollisionMgr = new CollisionManager();
-            
-            Square = new Square("Top Left Square");
-            player = new TestPlayer("Player");
-            ball1 = new Square("Bottom Right Square");
-            ball2 = new Square("ringading");
+
+            Square = new Square();
+            player = new TestPlayer();
+            ball1 = new Square();
+            ball2 = new Square();
 
             Entities.Add(player);
             Entities.Add(Square);
             Entities.Add(ball1);
             Entities.Add(ball2);
 
+            wallLeft = new PlaneClass(new Vector2(1, 0), 0);
+            wallRight = new PlaneClass(new Vector2(-1,0), ScreenWidth);
+            wallTop = new PlaneClass(new Vector2(-1, 0), 0);
+            wallBottom = new PlaneClass(new Vector2(1, 0), ScreenHeight);
 
-            this.IsMouseVisible = true;
+            Entities.Add(wallLeft);
+            Entities.Add(wallRight);
+            Entities.Add(wallTop);
+            Entities.Add(wallBottom);
+
+
+            IsMouseVisible = true;
 
             base.Initialize();
 
@@ -85,20 +101,20 @@ namespace DemonstrationEngine
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Square.setPos(new Vector2 (50, 50));
-            Square.setTex(Content.Load<Texture2D>("square"));
+            Square.Position = new Vector2(50, 50);
+            Square.Texture = (Content.Load<Texture2D>("square"));
             CollisionMgr.hasCollisions(Square);
 
-            player.setPos(new Vector2(200, 100));
-            player.setTex(Content.Load<Texture2D>("square"));
+            player.Position = new Vector2(200, 100);
+            player.Texture = Content.Load<Texture2D>("square");
             CollisionMgr.hasCollisions(player);
 
-            ball1.setPos(new Vector2(500, 500));
-            ball1.setTex(Content.Load<Texture2D>("square"));
+            ball1.Position = new Vector2(500, 500);
+            ball1.Texture = Content.Load<Texture2D>("square");
             CollisionMgr.hasCollisions(ball1);
 
-            ball2.setPos(new Vector2(600, 500));
-            ball2.setTex(Content.Load<Texture2D>("square"));
+            ball2.Position = new Vector2(600, 500);
+            ball2.Texture = Content.Load<Texture2D>("square");
             CollisionMgr.hasCollisions(ball2);
 
 
@@ -139,7 +155,7 @@ namespace DemonstrationEngine
             }
 
         }
-            
+
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -147,9 +163,9 @@ namespace DemonstrationEngine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-                GraphicsDevice.Clear(Color.AntiqueWhite);
-            
-            
+            GraphicsDevice.Clear(Color.AntiqueWhite);
+
+
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
@@ -181,7 +197,7 @@ namespace DemonstrationEngine
                     spriteBatch, playerPoints[i], playerPoints[i + 1 == playerPoints.Count ? 0 : i + 1]
                 );
             }
-            foreach(QuadTree quads in quadList)
+            foreach (QuadTree quads in quadList)
             {
                 quads.Draw(spriteBatch, lineTexture);
             }

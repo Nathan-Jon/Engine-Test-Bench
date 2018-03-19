@@ -1,10 +1,10 @@
 ﻿using System;
-
+using DemonstrationEngine.Physics;
 using Microsoft.Xna.Framework;
 
 namespace DemonstrationEngine.StateMachines.States
 {
-    class MoveLeft<T> : IState<T> where T: IAsset 
+    class MoveLeft<T> : IState<T> where T: IPhysics
     {
         public bool success { get; }
 

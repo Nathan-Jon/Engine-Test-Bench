@@ -1,57 +1,99 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DemonstrationEngine
 
 {
-    class AssetBase
+    class AssetBase: IAsset
     {
         public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
         public Texture2D Texture { get; set; }
-        public Vector2 Acceleration;
-        public Vector2 Gravity { get; set; }
 
-        public bool GravityBool = true;
-        public void SetGravity(bool setG)
+        public string Tag { get; set; }
+
+        protected List<Vector2> Points = new List<Vector2>();
+        protected List<Vector2> edges = new List<Vector2>();
+        protected Vector2 _point1;
+        protected Vector2 _point2;
+        protected Vector2 _point3;
+        protected Vector2 _point4;
+
+        public void Draw(SpriteBatch spriteBatch)
         {
-            GravityBool = setG;
+            //Draws the object on screen
+            SetPoints();
+            spriteBatch.Draw(Texture, Points[0], Color.BlueViolet);
         }
 
-        //Inverse mass to encourage multiplication and not diviision due to multiplication being faster
-        public float InverseMass =  -1.5f;
-        public float Restitution = 1f;
-        public float Damping = 0.5f;
-
-
-
-        public void ApplyForce(Vector2 force)
+        public void SetPoints()
         {
-            //Multiply force by the inversemass to obtain the acceleration value
-            Acceleration += force * InverseMass;
+            Points.Clear();
+            //Top Left
+            _point1 = new Vector2(Position.X, Position.Y);
+            //Top Right
+            _point2 = new Vector2((Position.X + Texture.Width), Position.Y);
+            //Bottom Right
+            _point3 = new Vector2((Position.X + Texture.Width), (Position.Y + Texture.Height));
+            //Bottom Left
+            _point4 = new Vector2(Position.X, (Position.Y + Texture.Height));
+
+
+            Points.Add(_point1);
+            Points.Add(_point2);
+            Points.Add(_point3);
+            Points.Add(_point4);
+
+            BuildEdges();
         }
 
-        public void ApplyImpulse(Vector2 closingVelo)
+        public void BuildEdges()
         {
-            //Apply Impulse by setting the velocy to the closing velocity by the Restitution of the entity
-            Velocity = closingVelo * Restitution;
-        }
-
-        public void UpdatePhysics()
-        {
-            Velocity += Acceleration;
-            Velocity *= Damping;
-            Position += Velocity;
-            
-            //Apply Gravity
-            if(GravityBool)
-            { Gravity = new Vector2(0,5);}
-            else
+            Vector2 p1;
+            Vector2 p2;
+            edges.Clear();
+            for (int i = 0; i < Points.Count; i++)
             {
-                Gravity = new Vector2(0,-5);
+                p1 = Points[i];
+                if (i + 1 >= Points.Count)
+                {
+                    p2 = Points[0];
+                }
+                else
+                {
+                    p2 = Points[i + 1];
+                }
+                edges.Add(p2 - p1);
             }
-            Acceleration = Gravity;
         }
+
+        public virtual void Update()
+        {
+        }
+
+        public List<Vector2> Point()
+        {
+            return Points;
+        }
+
+        public List<Vector2> Edges()
+        {
+            return edges;
+        }
+
+        public Vector2 Center()
+        {
+            float totalX = 0;
+            float totalY = 0;
+            for (int i = 0; i < Points.Count; i++)
+            {
+                totalX += Points[i].X;
+                totalY += Points[i].Y;
+            }
+            return new Vector2(totalX / Points.Count, totalY / Points.Count);
+        }
+
 
     }
+
 }

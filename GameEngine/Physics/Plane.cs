@@ -1,18 +1,67 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DemonstrationEngine.Physics
 {
-    class Plane
+    class PlaneClass : IPlane//IAsset, IPlane
     {
-        private Vector2 v2Normal;
-        private float offset;
+
+        public Vector2 Normal { get; set; }
+        public float Offset { get; set; }
 
 
-        public Plane(Vector2 normal, float offset)
+        public PlaneClass(Vector2 normal, float offset)
         {
-            this.offset = offset; 
-            v2Normal = normal;
-            v2Normal.Normalize();
+            Offset = offset;
+            Normal = normal;
         }
+
+        #region Interface
+        //public Vector2 Position
+        //{
+
+        //}
+
+        //public string Tag
+        //{
+
+        //}
+
+        //public Texture2D Texture
+        //{
+            
+        //}
+
+        //public void BuildEdges()
+        //{
+        //}
+
+        //public Vector2 Center()
+        //{
+        //}
+
+        //public void Draw(SpriteBatch spriteBatch)
+        //{
+        //}
+
+        //public List<Vector2> Edges()
+        //{
+        //}
+
+        //public List<Vector2> Point()
+        //{
+        //}
+
+        //public void SetPoints()
+        //{
+        //}
+
+        //public void Update()
+        //{
+        //}
+
+#endregion
     }
 }

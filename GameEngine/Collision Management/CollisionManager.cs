@@ -1,15 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using DemonstrationEngine.Physics;
 
-/// <summary>
-/// Collision Manager which controls collision detection, and what objects can collide with one and other
-/// </summary>
+
 namespace DemonstrationEngine.Collision_Management
 {
+    /// <summary>
+    /// Collision Manager which controls collision detection, and what objects can collide with one and other
+    /// </summary>
     public class CollisionManager : ICollidable
     {
 
@@ -57,9 +55,13 @@ namespace DemonstrationEngine.Collision_Management
 
                     for (int u = 0; u < WillCollide.Count; u++)
                     {
-                        if (CollidableObjects[i] == typeof(ICollidable)) //&& WillCollide[u] == typeof(ICollidable))
+                        if (CollidableObjects[i] is ICollidable) //&& WillCollide[u] == typeof(ICollidable))
                         {
                             SAT.PolygonVsPolygon(CollidableObjects[i], WillCollide[u]);
+                        }
+                        else if (CollidableObjects[i] is IPlane)
+                        {
+                            //SAT.PolygonVsPlane;
                         }
 
                         if (SAT.Intersect)

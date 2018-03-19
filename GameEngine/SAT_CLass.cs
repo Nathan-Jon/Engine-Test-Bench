@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DemonstrationEngine.Physics;
 using Microsoft.Xna.Framework;
 
 namespace DemonstrationEngine
@@ -48,11 +49,7 @@ namespace DemonstrationEngine
                     edgeNumber = _ent2.Edges()[i - ent1Edges];
                 }
 
-
-                //attach the axis into a new vector2
-                Vector2 axis = new Vector2(-edgeNumber.Y, edgeNumber.X); //Rotate the axies edge by 90 degrees
-                                                                         //Normalize the axis
-                axis.Normalize();   //Convert Axies to a unit Vector 
+                edgeNumber.Normalize();   //Convert Axies to a unit Vector 
 
 
                 //=============================================== PROJECT EVERY POINT ON EVERY AXIES FOR BOTH OBJECTS ===========================================\\
@@ -60,13 +57,13 @@ namespace DemonstrationEngine
 
                 float Ent1Min = 0, Ent2Min = 0, Ent1Max = 0, Ent2Max = 0;       //Initialise min/Max variables for each obj
 
-                ProjectPolygon(axis, _ent1, ref Ent1Min, ref Ent1Max);    //Get the distance of object 1's min and max points on the axies
-                ProjectPolygon(axis, _ent2, ref Ent2Min, ref Ent2Max);    //Get the distance of object 2's min and max points on the axies
+                ProjectPolygon(edgeNumber, _ent1, ref Ent1Min, ref Ent1Max);    //Get the distance of object 1's min and max points on the axies
+                ProjectPolygon(edgeNumber, _ent2, ref Ent2Min, ref Ent2Max);    //Get the distance of object 2's min and max points on the axies
 
                 //====================================================== DETERMINE IF COLLISIONS ARE OCCURING ====================================================\\
 
                 //Determine if there is an overlap
-                float interdis = IntervalDistance(Ent1Min, Ent1Max, Ent2Min, Ent2Max);
+                float interdis = PolyIntervalDistance(Ent1Min, Ent1Max, Ent2Min, Ent2Max);
                 if (interdis > 0)
                 {
                     //if the value is greater than zero, there is no collision
@@ -82,7 +79,7 @@ namespace DemonstrationEngine
                 if (interdis < minInterDis)
                 {
                     minInterDis = interdis;
-                    edgeNormal = axis;
+                    edgeNormal = edgeNumber;
 
                     Vector2 centerDistance = _ent1.Center() - _ent2.Center();
                     if (Vector2.Dot(centerDistance, edgeNormal) < 0)
@@ -103,8 +100,79 @@ namespace DemonstrationEngine
 
         }
 
-        public float IntervalDistance(float Ent1Min, float Ent1Max, float Ent2Min, float Ent2Max)
+        //public void PolygonVsPlane(IPlane plane, IAsset entity)
+        //{
+
+        //    //Initialise booleans
+        //    Intersect = true;
+
+
+        //    //Iniitialise edges lists
+        //    int entEdges = entity.Edges().Count;
+
+        //    //Variabls for MTV
+        //    float minInterDis = float.PositiveInfinity;
+        //    Vector2 Normal = plane.Normal;
+        //    Vector2 edgeNumber = new Vector2();
+
+        //    //Get the edges we are testing against
+        //    for (int i = 0; i < entEdges; i++)
+        //    {
+
+        //        //============================================================  Generate Edges of Polygon ================================================================\\
+
+        //        if (i < entEdges)
+        //        {
+        //            edgeNumber = entity.Edges()[i];
+        //        }
+
+        //        //=============================================== PROJECT EVERY POINT ON EVERY AXIES FOR BOTH OBJECTS ===========================================\\
+
+
+        //        float EntMin = 0, EntMax = 0;       //Initialise min/Max variables for each obj
+
+        //        ProjectPolygon(Normal, entity, ref EntMin, ref EntMax);    //Get the distance of object 2's min and max points on the axies
+        //        float planePoint = (Vector2.Dot(plane.Normal, plane.Position))
+
+        //        //====================================================== DETERMINE IF COLLISIONS ARE OCCURING ====================================================\\
+
+        //        //Determine if there is an overlap
+        //        float interdis = PolyVsPlaneIntervalDistance(EntMin, EntMax, plane);
+        //        if (interdis > 0)
+        //        {
+        //            //if the value is greater than zero, there is no collision
+        //            Intersect = false;
+        //            break;
+        //        }
+        //        else if (interdis < 0)
+        //        {
+        //            Intersect = true;
+        //        }
+
+        //        interdis = Math.Abs(interdis);
+        //        if (interdis < minInterDis)
+        //        {
+        //            minInterDis = interdis;
+        //            edgeNormal = edgeNumber;
+
+        //            Vector2 centerDistance = _ent1.Center() - enti.Center();
+        //            if (Vector2.Dot(centerDistance, edgeNormal) < 0)
+        //            {
+        //                edgeNormal = -edgeNormal;
+        //            }
+        //        }
+        //        //Set the MTV variable if collision             
+
+        //        MTV = edgeNormal * minInterDis;
+
+        //    }
+
+
+        //}
+
+        public float PolyIntervalDistance(float Ent1Min, float Ent1Max, float Ent2Min, float Ent2Max)
         {
+            //IF 
             if (Ent1Min < Ent2Min)
             {
                 return Ent2Min - Ent1Max;
@@ -114,6 +182,11 @@ namespace DemonstrationEngine
                 return Ent1Min - Ent2Max;
             }
         }
+
+        //public float PolyVsPlaneIntervalDistance(float entMin, float entMax, IPlane plane)
+        //{
+            
+        //}
 
         // Calculate the projection of a polygon on an axis and returns it as a [min, max] interval
         public void ProjectPolygon(Vector2 axis, IAsset Entity, ref float min, ref float max)
@@ -138,6 +211,7 @@ namespace DemonstrationEngine
                 }
             }
         }
+
         public Vector2 ClosingVelocity(Vector2 CNormal, Vector2 Velocity1, Vector2 Velocity2)
         {
 
