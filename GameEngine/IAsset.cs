@@ -7,6 +7,7 @@ namespace DemonstrationEngine
     public interface IAsset
     {
         void Draw(SpriteBatch spriteBatch);
+        void DrawHitBox(SpriteBatch spriteBatch, Texture2D tex);
         void Update();
         void BuildEdges();
         void SetPoints();
@@ -18,6 +19,7 @@ namespace DemonstrationEngine
         string Tag { get; set; }
         Vector2 Position { get; set; }
         Texture2D Texture { get; set; }
+        Rectangle HitBox { get; set; }
 
     }
 }

@@ -43,7 +43,8 @@ namespace DemonstrationEngine
 
         public override void Update()
         {
-           // move();
+            HitBox = new Rectangle((int)Position.X - 25, (int)Position.Y - 25, Texture.Width * 2, Texture.Height * 2);
+            // move();
             CollisionDetection();
             UpdatePhysics();
         }

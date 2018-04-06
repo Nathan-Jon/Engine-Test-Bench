@@ -37,7 +37,13 @@ namespace DemonstrationEngine.Collision_Management
         /// </summary>
         public void Update()
         {
+            //QuadColi();
+            HierarchyColi();
+            
+        }
 
+        public void QuadColi()
+        {
             Quad.Clear(); //Clear the list of Quads with the clear() method in the Quad class
             for (int i = 0; i < CollidableObjects.Count; i++) //For every entity in the collidable objects list
             {
@@ -69,11 +75,35 @@ namespace DemonstrationEngine.Collision_Management
                             CollidableObjects[i].Position += SAT.MTV;
                         }
                     }
-                                
+
                 }
             }
         }
 
+        public void HierarchyColi()
+        {
+
+            for (int i = 0; i < CollidableObjects.Count; i++)
+            {
+                for (int x = 0; x < CollidableObjects.Count; x++)
+                {
+
+                    if (x != i)
+                    {
+                        if (CollidableObjects[i].HitBox.Intersects(CollidableObjects[x].HitBox))
+                        {
+                            SAT.PolygonVsPolygon(CollidableObjects[i], CollidableObjects[x]);
+
+
+                            if (SAT.Intersect)
+                            {
+                                CollidableObjects[i].Position += SAT.MTV;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Method to store entities in a list of entities which have collisions
         /// </summary>

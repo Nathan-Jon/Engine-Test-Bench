@@ -38,14 +38,14 @@ namespace DemonstrationEngine.Physics
             Position += Velocity;
 
             //Apply Gravity
-            if (GravityBool)
-            {
-                Gravity = new Vector2(0, 5);
-            }
-            else
-            {
-                Gravity = new Vector2(0, -5);
-            }
+            //if (GravityBool)
+            //{
+            //    Gravity = new Vector2(0, 5);
+            //}
+            //else
+            //{
+            //    Gravity = new Vector2(0, -5);
+            //}
             Acceleration = Gravity;
 
         }

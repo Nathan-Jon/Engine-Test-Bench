@@ -9,7 +9,7 @@ namespace DemonstrationEngine
     {
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
-
+        public Rectangle HitBox { get; set; }
         public string Tag { get; set; }
 
         protected List<Vector2> Points = new List<Vector2>();
@@ -24,6 +24,11 @@ namespace DemonstrationEngine
             //Draws the object on screen
             SetPoints();
             spriteBatch.Draw(Texture, Points[0], Color.BlueViolet);
+        }
+        //used to draw hitboxes for showcase/testing
+        public void DrawHitBox(SpriteBatch spriteBatch, Texture2D tex)
+        {
+            spriteBatch.Draw(tex, HitBox, Color.White);
         }
 
         public void SetPoints()

@@ -75,15 +75,15 @@ namespace DemonstrationEngine
             Entities.Add(ball1);
             Entities.Add(ball2);
 
-            wallLeft = new PlaneClass(new Vector2(1, 0), 0);
-            wallRight = new PlaneClass(new Vector2(-1,0), ScreenWidth);
-            wallTop = new PlaneClass(new Vector2(-1, 0), 0);
-            wallBottom = new PlaneClass(new Vector2(1, 0), ScreenHeight);
+            //wallLeft = new PlaneClass(new Vector2(1, 0), 0);
+            //wallRight = new PlaneClass(new Vector2(-1,0), ScreenWidth);
+            //wallTop = new PlaneClass(new Vector2(-1, 0), 0);
+            //wallBottom = new PlaneClass(new Vector2(1, 0), ScreenHeight);
 
-            Entities.Add(wallLeft);
-            Entities.Add(wallRight);
-            Entities.Add(wallTop);
-            Entities.Add(wallBottom);
+            //Entities.Add(wallLeft);
+            //Entities.Add(wallRight);
+            //Entities.Add(wallTop);
+            //Entities.Add(wallBottom);
 
 
             IsMouseVisible = true;
@@ -172,7 +172,15 @@ namespace DemonstrationEngine
 
 
 
-            //quad.Draw(spriteBatch, lineTexture);
+            foreach (QuadTree quads in quadList)
+            {
+                //quads.Draw(spriteBatch, lineTexture);
+            }
+
+            foreach (IAsset entity in Entities)
+            {
+                entity.DrawHitBox(spriteBatch, lineTexture);
+            }
 
 
 
@@ -197,10 +205,7 @@ namespace DemonstrationEngine
                     spriteBatch, playerPoints[i], playerPoints[i + 1 == playerPoints.Count ? 0 : i + 1]
                 );
             }
-            foreach (QuadTree quads in quadList)
-            {
-                quads.Draw(spriteBatch, lineTexture);
-            }
+
 
             spriteBatch.End();
 

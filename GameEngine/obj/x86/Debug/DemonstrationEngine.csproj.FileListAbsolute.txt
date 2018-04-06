@@ -12,3 +12,15 @@ C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\Windows
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\DemonstrationEngine.pdb
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.exe
 C:\Users\Nathan\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.pdb
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.exe
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.pdb
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\obj\x86\Debug\DemonstrationEngine.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\Content\ball.png
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\Content\Brick.jpg
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\Content\paddle.png
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\Content\square.png
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\Content\Wall.jpg
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\DemonstrationEngine.exe
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\DemonstrationEngine.pdb
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\User\Documents\GitHub\Seperating-Axies-Theorem\GameEngine\bin\WindowsGL\Debug\OpenTK.dll
